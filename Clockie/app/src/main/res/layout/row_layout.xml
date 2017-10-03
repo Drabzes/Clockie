@@ -6,27 +6,26 @@
     android:paddingLeft="30dp"
     android:paddingRight="30dp"
     android:paddingBottom="15dp"
-    android:paddingTop="15dp">
+    android:paddingTop="15dp"
+    android:id="@+id/rowLayout">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="07:00"
             android:textSize="30dp"
             android:textColor="@color/colorPrimary"
-            android:id="@+id/clock"
+            android:id="@+id/time"
             android:paddingRight="15dp"
             android:layout_marginBottom="10dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
-            android:text="Label"
-            android:id="@+id/clockLabel"
+            android:id="@+id/label"
             android:textSize="15dp"
-            android:layout_toRightOf="@+id/clock"
-            android:layout_alignBaseline="@+id/clock"/>
+            android:layout_toRightOf="@+id/time"
+            android:layout_alignBaseline="@+id/time"/>
         <Switch
-            android:id="@+id/clockSwitch"
+            android:id="@+id/alarmSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
@@ -34,10 +33,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/rainIcon"
+            android:src="@drawable/rain_icon"
             android:layout_marginRight="10dp"
             android:id="@+id/rainIcon"
-            android:layout_below="@+id/clock"/>
+            android:layout_below="@+id/time"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +45,7 @@
             android:layout_marginRight="10dp"
             android:id="@+id/clockRain"
             android:layout_toEndOf="@+id/rainIcon"
-            android:layout_below="@+id/clock"/>
+            android:layout_below="@+id/time"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,7 +54,7 @@
             android:padding="7dp"
             android:textSize="15dp"
             android:layout_toRightOf="@+id/clockRain"
-            android:layout_below="@+id/clock"
+            android:layout_below="@+id/time"
             android:layout_alignBaseline="@+id/clockRain"/>
         <TextView
             android:layout_width="wrap_content"
@@ -65,7 +64,7 @@
             android:padding="7dp"
             android:textSize="15dp"
             android:layout_toRightOf="@+id/mondayLabel"
-            android:layout_below="@+id/clock"
+            android:layout_below="@+id/time"
             android:layout_alignBaseline="@+id/clockRain"/>
         <TextView
             android:layout_width="wrap_content"
@@ -75,7 +74,7 @@
             android:padding="7dp"
             android:textSize="15dp"
             android:layout_toRightOf="@+id/tuesdayLabel"
-            android:layout_below="@+id/clock"
+            android:layout_below="@+id/time"
             android:layout_alignBaseline="@+id/clockRain"/>
         <TextView
             android:layout_width="wrap_content"
@@ -86,7 +85,7 @@
             android:textSize="15dp"
             android:textColor="@color/colorPrimary"
             android:layout_toRightOf="@+id/wednesdayLabel"
-            android:layout_below="@+id/clock"
+            android:layout_below="@+id/time"
             android:layout_alignBaseline="@+id/clockRain"/>
         <TextView
             android:layout_width="wrap_content"
@@ -96,7 +95,7 @@
             android:padding="7dp"
             android:textSize="15dp"
             android:layout_toRightOf="@+id/thursdayLabel"
-            android:layout_below="@+id/clock"
+            android:layout_below="@+id/time"
             android:layout_alignBaseline="@+id/clockRain"/>
         <TextView
             android:layout_width="wrap_content"
@@ -106,7 +105,7 @@
             android:padding="7dp"
             android:textSize="15dp"
             android:layout_toRightOf="@+id/fridayLabel"
-            android:layout_below="@+id/clock"
+            android:layout_below="@+id/time"
             android:layout_alignBaseline="@+id/clockRain"/>
         <TextView
             android:layout_width="wrap_content"
@@ -116,12 +115,12 @@
             android:padding="7dp"
             android:textSize="15dp"
             android:layout_toRightOf="@+id/saturdayLabel"
-            android:layout_below="@+id/clock"
+            android:layout_below="@+id/time"
             android:layout_alignBaseline="@+id/clockRain"/>
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/clock">
+            android:layout_below="@+id/time">
         </Spinner>
 </RelativeLayout>
