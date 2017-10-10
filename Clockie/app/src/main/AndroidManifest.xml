@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".NewAlarmActivity" />
+        <activity android:name=".NewAlarmActivity"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

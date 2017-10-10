@@ -6,6 +6,6 @@
     <fragment android:name="pxl.be.clockie.NewAlarmFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/new_alarm_fragment"
+        android:id="@+id/newAlarmFragment"
         tools:layout="@layout/new_alarm_fragment"/>
 </LinearLayout>

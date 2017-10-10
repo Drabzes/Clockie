@@ -1,5 +1,6 @@
 package pxl.be.clockie;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
     }
 
     @Override
@@ -47,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void addAlarmButtonClicked(View view){
+    public void addAlarmButtonClicked(View view) {
+        Intent intent = new Intent(this, NewAlarmActivity.class);
+        startActivity(intent);
         Toast.makeText(getApplicationContext(), "add workds", Toast.LENGTH_SHORT).show();
     }
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="40dp"
-    android:layout_marginRight="40dp"
+    android:paddingLeft="40dp"
+    android:paddingRight="40dp"
     android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,17 +15,19 @@
         android:orientation="horizontal">
 
         <TimePicker
-            android:id="@+id/timePicker2"
+            android:id="@+id/time"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:timePickerMode="spinner" />
+            android:timePickerMode="spinner"
+            android:numbersTextColor="@color/colorPrimary"/>
 
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="label" />
+            android:hint="label"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
