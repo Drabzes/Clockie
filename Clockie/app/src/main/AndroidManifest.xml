@@ -20,8 +20,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".NewAlarmActivity"
-            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".NewAlarmActivity"
+            android:parentActivityName=".MainActivity" />
+
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

@@ -16,6 +16,14 @@
             android:id="@+id/time"
             android:paddingRight="15dp"
             android:layout_marginBottom="10dp"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/testButton"
+            android:text="zet alarm aan"
+            android:onClick="onSwitchClicked"
+            android:layout_below="@+id/sundayLabel"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
