@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 public class ListFragment extends Fragment{
@@ -22,8 +23,17 @@ public class ListFragment extends Fragment{
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.list_fragment, container, false);
 
-        Alarm alarm1 = new Alarm("07:00", "test", true, "06:45", "testSong", true);
-        Alarm alarm2 = new Alarm("07:30", "test2", false, "07:45", "testSong2", false);
+        Calendar time1 = Calendar.getInstance();
+        Calendar time2 = Calendar.getInstance();
+
+        time1.set(Calendar.HOUR,6);
+        time1.set(Calendar.MINUTE,33);
+
+        time2.set(Calendar.HOUR,2);
+        time2.set(Calendar.MINUTE,55);
+
+        Alarm alarm1 = new Alarm(time1, "test", true, "06:45", "testSong", true);
+        Alarm alarm2 = new Alarm(time2, "test2", false, "07:45", "testSong2", false);
 
         List<Alarm> alarms = new ArrayList<Alarm>();
         alarms.add(alarm1);

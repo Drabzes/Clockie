@@ -1,14 +1,16 @@
 package pxl.be.clockie;
 
+import java.util.Calendar;
+
 public class Alarm {
-    private String time;
+    private Calendar time;
     private String label;
     private boolean active;
     private String rainTime;
     private String song;
     private boolean snooze;
 
-    public Alarm(String time, String label, boolean active, String rainTime, String song, boolean snooze) {
+    public Alarm(Calendar time, String label, boolean active, String rainTime, String song, boolean snooze) {
         this.time = time;
         this.label = label;
         this.active = active;
@@ -17,11 +19,11 @@ public class Alarm {
         this.snooze = snooze;
     }
 
-    public String getTime() {
+    public Calendar getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Calendar time) {
         this.time = time;
     }
 
