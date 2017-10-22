@@ -1,7 +1,5 @@
 package pxl.be.clockie;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,10 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.Calendar;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,24 +50,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         Toast.makeText(getApplicationContext(), "add workds", Toast.LENGTH_SHORT).show();
     }
-
-    public void onSwitchClicked(View view) {
-        Button alarmOn = (Button) view.findViewById(R.id.testButton);
-
-        alarmOn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                Calendar calendar = Calendar.getInstance();
-
-                Intent receiverIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
-                calendar.set(Calendar.HOUR_OF_DAY, 10);
-                calendar.set(Calendar.MINUTE, 50);
-                PendingIntent senderIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), senderIntent);
-            }
-        });
-    }
-
 }
