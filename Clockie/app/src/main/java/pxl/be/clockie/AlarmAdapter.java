@@ -4,8 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
@@ -45,6 +45,10 @@ public class AlarmAdapter extends ArrayAdapter<Alarm>{
         labelTextView.setText(alarm.getLabel());
         alarmSwitch.setChecked(alarm.isActive());
 
+        if(alarm.isActive()) {
+            setAlarm(alarm.getTime().getTimeInMillis(), alarm.getId());
+        }
+
         alarmSwitch.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -64,23 +68,28 @@ public class AlarmAdapter extends ArrayAdapter<Alarm>{
         return rowView;
     }
 
-    public void cancelAlarm(int requestCode) {
+    private void cancelAlarm(int requestCode) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = createPendingIntent(requestCode);
         alarmManager.cancel(pendingIntent);
     }
 
-    public void setAlarm(long timeInMillis, int requestCode) {
+    private void setAlarm(long timeInMillis, int requestCode) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = createPendingIntent(requestCode);
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
-        Toast.makeText(context, "alarm is gezet", Toast.LENGTH_SHORT).show();
+
+        Date date = new Date(timeInMillis);
+        DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
+        String dateFormatted = formatter.format(date);
+        Toast.makeText(context, "alarm is gezet: " + dateFormatted, Toast.LENGTH_SHORT).show();
 
     }
 
     private PendingIntent createPendingIntent(int requestCode){
         Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra("alarmIsOn", true);
         return PendingIntent.getBroadcast(context, requestCode, intent, FLAG_UPDATE_CURRENT);
     }
 }

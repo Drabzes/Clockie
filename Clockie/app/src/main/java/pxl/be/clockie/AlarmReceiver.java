@@ -6,9 +6,10 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.provider.Settings;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
+import android.view.View;
+import android.widget.Button;
 
 
 public class AlarmReceiver extends BroadcastReceiver {
@@ -16,17 +17,30 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        MediaPlayer mediaPlayer = MediaPlayer.create(context, Settings.System.DEFAULT_ALARM_ALERT_URI);
-        mediaPlayer.start();
+        startRingtoneService(context, intent);
+        if(intent.getExtras().getBoolean("alarmIsOn")) {
+            showNotification(context, intent);
+        }
+    }
 
+    private void startRingtoneService(Context context, Intent intent) {
+        boolean alarmIsOn = intent.getExtras().getBoolean("alarmIsOn");
+        Intent ringtoneIntent = new Intent(context, RingtoneService.class);
+        ringtoneIntent.putExtra("alarmIsOn", alarmIsOn);
+        context.startService(ringtoneIntent);
+    }
+
+    private void showNotification(Context context, Intent intent) {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.alarm_clock_icon)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.alarm_clock_icon))
                 .setContentTitle("Wekker gaat af")
-                .setContentText("my message");
-//                .setOngoing(true)
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                .setAutoCancel(true);
-//        Intent intent = new Intent(context, MainActivity.class);
+                .setContentText("my message")
+                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setPriority(Notification.PRIORITY_MAX)
+                .setOngoing(true)
+                .setAutoCancel(true);
+
         PendingIntent pendingIntent =
                 PendingIntent.getActivity(
                         context,
@@ -41,4 +55,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFY_ID, notification);
     }
+
+
 }

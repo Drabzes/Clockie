@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -21,6 +22,16 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
+
+        Button stopAlarmButton = (Button) findViewById(R.id.stopAlarm);
+        stopAlarmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                intent.putExtra("alarmIsOn", false);
+                sendBroadcast(intent);
+            }
+        });
     }
 
     @Override

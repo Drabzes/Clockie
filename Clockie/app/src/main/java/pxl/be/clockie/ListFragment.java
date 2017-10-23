@@ -27,18 +27,21 @@ public class ListFragment extends Fragment {
         Calendar time2 = Calendar.getInstance();
         Calendar time3 = Calendar.getInstance();
 
-        time1.set(Calendar.HOUR_OF_DAY, 11);
-        time1.set(Calendar.MINUTE, 52);
+        time1.set(Calendar.HOUR_OF_DAY, 15);
+        time1.set(Calendar.MINUTE, 48);
         time1.set(Calendar.SECOND, 0);
+        time1.set(Calendar.MILLISECOND, 0);
 
-        time2.set(Calendar.HOUR_OF_DAY, 19);
-        time2.set(Calendar.MINUTE, 52);
+        time2.set(Calendar.HOUR_OF_DAY, 15);
+        time2.set(Calendar.MINUTE, 35);
         time2.set(Calendar.SECOND, 0);
+        time2.set(Calendar.MILLISECOND, 0);
 
 
         time3.set(Calendar.HOUR_OF_DAY, 16);
         time3.set(Calendar.MINUTE, 10);
         time3.set(Calendar.SECOND, 0);
+        time3.set(Calendar.MILLISECOND, 0);
 
         List<Alarm> alarms = new ArrayList<Alarm>();
         alarms.add(new Alarm(1, time1, "test", true, "06:45", "testSong", true));
