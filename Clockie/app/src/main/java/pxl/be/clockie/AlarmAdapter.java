@@ -17,14 +17,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
-
 public class AlarmAdapter extends ArrayAdapter<Alarm>{
     private final Context context;
     private final List<Alarm> alarms;
-    private Switch alarmSwitch;
 
-    public AlarmAdapter(Context context, List<Alarm> alarms){
+    AlarmAdapter(Context context, List<Alarm> alarms){
         super(context, -1, alarms);
         this.context = context;
         this.alarms = alarms;
@@ -37,7 +34,7 @@ public class AlarmAdapter extends ArrayAdapter<Alarm>{
 
         TextView timeTextView = (TextView) rowView.findViewById(R.id.time);
         TextView labelTextView = (TextView) rowView.findViewById(R.id.label);
-        alarmSwitch = (Switch) rowView.findViewById(R.id.alarmSwitch);
+        final Switch alarmSwitch = (Switch) rowView.findViewById(R.id.alarmSwitch);
         Alarm alarm = alarms.get(position);
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -53,8 +50,6 @@ public class AlarmAdapter extends ArrayAdapter<Alarm>{
 
             @Override
             public void onClick(View v) {
-                boolean newValue = !alarmSwitch.isChecked();
-                alarmSwitch.setChecked(newValue);
                 Alarm alarm = alarms.get(position);
                 alarm.setActive(alarmSwitch.isChecked());
 
@@ -68,17 +63,20 @@ public class AlarmAdapter extends ArrayAdapter<Alarm>{
         return rowView;
     }
 
-    private void cancelAlarm(int requestCode) {
+    private void cancelAlarm(long id) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        int requestCode = (int) id;
         PendingIntent pendingIntent = createPendingIntent(requestCode);
         alarmManager.cancel(pendingIntent);
+        Toast.makeText(context, "alarm gecanceld", Toast.LENGTH_SHORT).show();
     }
 
-    private void setAlarm(long timeInMillis, int requestCode) {
+    private void setAlarm(long timeInMillis, long id) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        int requestCode = (int) id;
         PendingIntent pendingIntent = createPendingIntent(requestCode);
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
 
         Date date = new Date(timeInMillis);
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
@@ -87,9 +85,10 @@ public class AlarmAdapter extends ArrayAdapter<Alarm>{
 
     }
 
-    private PendingIntent createPendingIntent(int requestCode){
+    private PendingIntent createPendingIntent(long id){
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra("alarmIsOn", true);
-        return PendingIntent.getBroadcast(context, requestCode, intent, FLAG_UPDATE_CURRENT);
+        int requestCode = (int) id;
+        return PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 }

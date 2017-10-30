@@ -30,6 +30,9 @@
 
         <service android:name=".RingtoneService"
             android:enabled="true"/>
+
+        <provider android:authorities="pxl.be.clockie"
+            android:name=".data.AlarmProvider"/>
     </application>
 
 </manifest>

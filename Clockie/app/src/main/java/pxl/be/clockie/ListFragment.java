@@ -1,18 +1,23 @@
 package pxl.be.clockie;
 
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+
+import pxl.be.clockie.data.AlarmContract;
 
 public class ListFragment extends Fragment {
     public ListFragment() {
@@ -23,31 +28,59 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_fragment, container, false);
 
-        Calendar time1 = Calendar.getInstance();
-        Calendar time2 = Calendar.getInstance();
-        Calendar time3 = Calendar.getInstance();
+//        Calendar calendar = Calendar.getInstance();
+//        time1.set(Calendar.HOUR_OF_DAY, 16);
+//        time1.set(Calendar.MINUTE, 40);
+//        time1.set(Calendar.SECOND, 0);
+//        time1.set(Calendar.MILLISECOND, 0);
 
-        time1.set(Calendar.HOUR_OF_DAY, 15);
-        time1.set(Calendar.MINUTE, 48);
-        time1.set(Calendar.SECOND, 0);
-        time1.set(Calendar.MILLISECOND, 0);
-
-        time2.set(Calendar.HOUR_OF_DAY, 15);
-        time2.set(Calendar.MINUTE, 35);
-        time2.set(Calendar.SECOND, 0);
-        time2.set(Calendar.MILLISECOND, 0);
-
-
-        time3.set(Calendar.HOUR_OF_DAY, 16);
-        time3.set(Calendar.MINUTE, 10);
-        time3.set(Calendar.SECOND, 0);
-        time3.set(Calendar.MILLISECOND, 0);
 
         List<Alarm> alarms = new ArrayList<Alarm>();
-        alarms.add(new Alarm(1, time1, "test", true, "06:45", "testSong", true));
-        alarms.add(new Alarm(2, time2, "test2", false, "07:45", "testSong2", false));
-        alarms.add(new Alarm(3, time3, "test3", false, "", "testSong2", false));
 
+        ContentResolver contentResolver = getActivity().getContentResolver();
+        String[] projection = new String[]{
+                AlarmContract.AlarmEntry._ID,
+                AlarmContract.AlarmEntry.COLUMN_LABEL,
+                AlarmContract.AlarmEntry.COLUMN_TIME,
+                AlarmContract.AlarmEntry.COLUMN_RAINTIME,
+                AlarmContract.AlarmEntry.COLUMN_SONG,
+                AlarmContract.AlarmEntry.COLUMN_SNOOZE,
+                AlarmContract.AlarmEntry.COLUMN_ACTIVE,
+        };
+
+        Cursor cursor = contentResolver.query(AlarmContract.AlarmEntry.CONTENT_URI, projection, null, null, null);
+
+        if (cursor.getCount() == 0) {
+            //SEEDING = tijdeling!
+            seedDatabase();
+            cursor = contentResolver.query(AlarmContract.AlarmEntry.CONTENT_URI, projection, null, null, null);
+        }
+
+        if(cursor.moveToFirst()) {
+
+            while (!cursor.isAfterLast()) {
+                long id = cursor.getLong(0);
+                String label = cursor.getString(1);
+                String time = cursor.getString(2);
+                String rainTime = cursor.getString(3);
+                String song = cursor.getString(4);
+                boolean snooze = cursor.getInt(5) == 1;
+                boolean active = cursor.getInt(6) == 1;
+
+                SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                Calendar calendar = Calendar.getInstance();
+                try {
+                    calendar.setTime(format.parse(time));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Alarm alarm = new Alarm(id, calendar, label, active, rainTime, song, snooze);
+                alarms.add(alarm);
+
+                cursor.moveToNext();
+            }
+        }
         AlarmAdapter alarmAdapter = new AlarmAdapter(getActivity(), alarms);
 
         ListView listView = (ListView) view.findViewById(R.id.clockList);
@@ -55,4 +88,27 @@ public class ListFragment extends Fragment {
 
         return view;
     }
+
+    private void seedDatabase() {
+        ContentValues values = new ContentValues();
+        ContentResolver resolver = getActivity().getContentResolver();
+
+        values.put(AlarmContract.AlarmEntry.COLUMN_LABEL, "Werk alarm");
+        values.put(AlarmContract.AlarmEntry.COLUMN_TIME, "06:05");
+        values.put(AlarmContract.AlarmEntry.COLUMN_RAINTIME, "06:20");
+        values.put(AlarmContract.AlarmEntry.COLUMN_SONG, "song");
+        values.put(AlarmContract.AlarmEntry.COLUMN_SNOOZE, 0);
+        values.put(AlarmContract.AlarmEntry.COLUMN_ACTIVE, 0);
+        resolver.insert(AlarmContract.AlarmEntry.CONTENT_URI, values);
+
+        ContentValues values2 = new ContentValues();
+        values2.put(AlarmContract.AlarmEntry.COLUMN_LABEL, "Weekend");
+        values2.put(AlarmContract.AlarmEntry.COLUMN_TIME, "20:23");
+        values2.put(AlarmContract.AlarmEntry.COLUMN_RAINTIME, "06:20");
+        values2.put(AlarmContract.AlarmEntry.COLUMN_SONG, "song");
+        values2.put(AlarmContract.AlarmEntry.COLUMN_SNOOZE, 0);
+        values2.put(AlarmContract.AlarmEntry.COLUMN_ACTIVE, 1);
+        resolver.insert(AlarmContract.AlarmEntry.CONTENT_URI, values2);
+    }
 }
+

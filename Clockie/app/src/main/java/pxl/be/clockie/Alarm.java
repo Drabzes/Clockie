@@ -3,7 +3,7 @@ package pxl.be.clockie;
 import java.util.Calendar;
 
 public class Alarm {
-    private int id;
+    private long id;
     private Calendar time;
     private String label;
     private boolean active;
@@ -11,7 +11,7 @@ public class Alarm {
     private String song;
     private boolean snooze;
 
-    public Alarm(int id, Calendar time, String label, boolean active, String rainTime, String song, boolean snooze) {
+    public Alarm(long id, Calendar time, String label, boolean active, String rainTime, String song, boolean snooze) {
         this.id = id;
         this.time = time;
         this.label = label;
@@ -21,7 +21,7 @@ public class Alarm {
         this.snooze = snooze;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
