@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,8 +12,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
+import pxl.be.clockie.data.AlarmDBHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DetailListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,5 +62,18 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, NewAlarmActivity.class);
         startActivity(intent);
         Toast.makeText(getApplicationContext(), "add workds", Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void setFields(int position) {
+        if (findViewById(R.id.detailFragment) != null) {
+            DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.detailFragment);
+            detailFragment.setAllFields(position);
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra("position", position);
+            startActivity(intent);
+        }
     }
 }

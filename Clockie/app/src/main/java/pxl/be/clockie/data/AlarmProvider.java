@@ -32,7 +32,6 @@ public class AlarmProvider extends ContentProvider {
     private AlarmDBHelper dbHelper;
 
     static final int ALARM = 100;
-    static final int ALARM_WITH_ID = 101;
 
     static UriMatcher buildUriMatcher() {
         final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -57,8 +56,6 @@ public class AlarmProvider extends ContentProvider {
         switch (match) {
             case ALARM:
                 return AlarmContract.AlarmEntry.CONTENT_TYPE;
-            case ALARM_WITH_ID:
-                return AlarmContract.AlarmEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

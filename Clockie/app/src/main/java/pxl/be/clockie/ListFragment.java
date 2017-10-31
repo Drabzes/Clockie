@@ -9,7 +9,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,16 +26,9 @@ public class ListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_fragment, container, false);
-
-//        Calendar calendar = Calendar.getInstance();
-//        time1.set(Calendar.HOUR_OF_DAY, 16);
-//        time1.set(Calendar.MINUTE, 40);
-//        time1.set(Calendar.SECOND, 0);
-//        time1.set(Calendar.MILLISECOND, 0);
-
 
         List<Alarm> alarms = new ArrayList<Alarm>();
 
@@ -85,6 +80,15 @@ public class ListFragment extends Fragment {
 
         ListView listView = (ListView) view.findViewById(R.id.clockList);
         listView.setAdapter(alarmAdapter);
+        listView.setItemsCanFocus(true);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DetailListener detailListener = (DetailListener) getActivity();
+                detailListener.setFields(position);
+            }
+        });
 
         return view;
     }

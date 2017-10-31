@@ -12,7 +12,7 @@ import pxl.be.clockie.data.AlarmContract.AlarmEntry;
 public class AlarmDBHelper extends SQLiteOpenHelper {
     private Context context;
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     static final String DATABASE_NAME = "alarm.db";
 
     public AlarmDBHelper(Context context) {
@@ -32,6 +32,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
                         AlarmContract.AlarmEntry.COLUMN_SNOOZE + " INTEGER NOT NULL, " +
                         AlarmContract.AlarmEntry.COLUMN_SONG + " TEXT);";
         db.execSQL(SQL_CREATE_ALARM_TABLE);
+        db.close();
     }
 
     @Override
