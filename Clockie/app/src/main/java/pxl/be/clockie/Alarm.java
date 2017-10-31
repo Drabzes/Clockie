@@ -1,6 +1,11 @@
 package pxl.be.clockie;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class Alarm {
     private long id;
@@ -10,8 +15,9 @@ public class Alarm {
     private String rainTime;
     private String song;
     private boolean snooze;
+    private HashMap<DayOfTheWeek, Boolean> days;
 
-    public Alarm(long id, Calendar time, String label, boolean active, String rainTime, String song, boolean snooze) {
+    public Alarm(long id, Calendar time, String label, boolean active, String rainTime, String song, boolean snooze, HashMap<DayOfTheWeek, Boolean> days) {
         this.id = id;
         this.time = time;
         this.label = label;
@@ -19,6 +25,7 @@ public class Alarm {
         this.rainTime = rainTime;
         this.song = song;
         this.snooze = snooze;
+        this.days = days;
     }
 
     public long getId() {
@@ -72,4 +79,13 @@ public class Alarm {
     public void setSnooze(boolean snooze) {
         this.snooze = snooze;
     }
+
+    public HashMap<DayOfTheWeek, Boolean> getDays() {
+        return days;
+    }
+
+    public void setDays(HashMap<DayOfTheWeek, Boolean> days) {
+        this.days = days;
+    }
+
 }

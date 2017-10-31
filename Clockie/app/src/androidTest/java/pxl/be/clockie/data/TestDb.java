@@ -70,9 +70,9 @@ public class TestDb{
             tableNameHashSet.remove(c.getString(0));
         } while( c.moveToNext() );
 
-        // if this fails, it means that your database doesn't contain both the location entry
+        // if this fails, it means that your database doesn't contain both the alarm entry
         // and weather entry tables
-        assertTrue("Error: Your database was created without both the location entry and weather entry tables",
+        assertTrue("Error: Your database was created without both the alarm entry ",
                 tableNameHashSet.isEmpty());
 
         // now, do our tables contain the correct columns?
@@ -89,6 +89,13 @@ public class TestDb{
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_TIME);
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_RAINTIME);
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_SONG);
+        columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_MONDAY);
+        columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_TUESDAY);
+        columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_WEDNESDAY);
+        columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_THURSDAY);
+        columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_FRIDAY);
+        columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_SATURDAY);
+        columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_SUNDAY);
 
         int columnNameIndex = c.getColumnIndex("name");
         do {
@@ -96,9 +103,9 @@ public class TestDb{
             columnHashSet.remove(columnName);
         } while(c.moveToNext());
 
-        // if this fails, it means that your database doesn't contain all of the required location
+        // if this fails, it means that your database doesn't contain all of the required alarm
         // entry columns
-        assertTrue("Error: The database doesn't contain all of the required location entry columns",
+        assertTrue("Error: The database doesn't contain all of the required alarm entry columns",
                 columnHashSet.isEmpty());
         db.close();
     }
@@ -112,6 +119,15 @@ public class TestDb{
         testValues.put(AlarmContract.AlarmEntry.COLUMN_TIME, "11:10");
         testValues.put(AlarmContract.AlarmEntry.COLUMN_RAINTIME, "11:20");
         testValues.put(AlarmContract.AlarmEntry.COLUMN_SONG, "song");
+        testValues.put(AlarmContract.AlarmEntry.COLUMN_ACTIVE, 0);
+        testValues.put(AlarmContract.AlarmEntry.COLUMN_SNOOZE, 0);
+        testValues.put(AlarmContract.AlarmEntry.COLUMN_MONDAY, 1);
+        testValues.put(AlarmContract.AlarmEntry.COLUMN_TUESDAY, 1);
+        testValues.put(AlarmContract.AlarmEntry.COLUMN_WEDNESDAY, 1);
+        testValues.put(AlarmContract.AlarmEntry.COLUMN_THURSDAY, 1);
+        testValues.put(AlarmContract.AlarmEntry.COLUMN_FRIDAY, 1);
+        testValues.put(AlarmContract.AlarmEntry.COLUMN_SATURDAY, 0);
+        testValues.put(AlarmContract.AlarmEntry.COLUMN_SUNDAY, 0);
 
         long rowId = db.insert(AlarmContract.AlarmEntry.TABLE_NAME, null, testValues);
 

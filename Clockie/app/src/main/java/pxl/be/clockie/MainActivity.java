@@ -59,9 +59,8 @@ public class MainActivity extends AppCompatActivity implements DetailListener{
     }
 
     public void addAlarmButtonClicked(View view) {
-        Intent intent = new Intent(this, NewAlarmActivity.class);
+        Intent intent = new Intent(this, AddAlarmActivity.class);
         startActivity(intent);
-        Toast.makeText(getApplicationContext(), "add workds", Toast.LENGTH_SHORT).show();
     }
 
 

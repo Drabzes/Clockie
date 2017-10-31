@@ -38,7 +38,6 @@ public class AlarmProvider extends ContentProvider {
         final String authority = AlarmContract.CONTENT_AUTHORITY;
 
         uriMatcher.addURI(authority, AlarmContract.PATH_ALARMS, ALARM);
-//        uriMatcher.addURI(authority, AlarmContract.PATH_ALARMS + "/#", ALARM_WITH_ID);
         return uriMatcher;
     }
 
