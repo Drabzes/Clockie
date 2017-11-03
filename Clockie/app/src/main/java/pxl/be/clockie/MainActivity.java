@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements DetailListener{
     }
 
     public void addAlarmButtonClicked(View view) {
-        Intent intent = new Intent(this, AddAlarmActivity.class);
+        Intent intent = new Intent(this, DetailActivity.class);
         startActivity(intent);
     }
 

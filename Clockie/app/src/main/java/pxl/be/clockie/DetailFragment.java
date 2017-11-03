@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import pxl.be.clockie.data.AlarmContract;
+import pxl.be.clockie.utils.AlarmUtils;
 
 public class DetailFragment extends Fragment {
     private TextView hiddenId;
@@ -39,7 +40,6 @@ public class DetailFragment extends Fragment {
     private FloatingActionButton deleteButton;
     private ToggleButton mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton, sundayButton;
     private HashMap<DayOfTheWeek, Boolean> days;
-    private Alarm alarm;
     private ContentResolver contentResolver;
 
     @Nullable
@@ -124,7 +124,6 @@ public class DetailFragment extends Fragment {
                 new String[]{String.valueOf(id)}, null);
         if (cursor.moveToFirst()) {
             cursor.close();
-
             return true;
         } else {
             cursor.close();
@@ -138,22 +137,7 @@ public class DetailFragment extends Fragment {
         List<Alarm> alarms = new ArrayList<>();
 
         ContentResolver contentResolver = getActivity().getContentResolver();
-        String[] projection = new String[]{
-                AlarmContract.AlarmEntry._ID,
-                AlarmContract.AlarmEntry.COLUMN_LABEL,
-                AlarmContract.AlarmEntry.COLUMN_TIME,
-                AlarmContract.AlarmEntry.COLUMN_RAINTIME,
-                AlarmContract.AlarmEntry.COLUMN_SONG,
-                AlarmContract.AlarmEntry.COLUMN_SNOOZE,
-                AlarmContract.AlarmEntry.COLUMN_ACTIVE,
-                AlarmContract.AlarmEntry.COLUMN_MONDAY,
-                AlarmContract.AlarmEntry.COLUMN_TUESDAY,
-                AlarmContract.AlarmEntry.COLUMN_WEDNESDAY,
-                AlarmContract.AlarmEntry.COLUMN_THURSDAY,
-                AlarmContract.AlarmEntry.COLUMN_FRIDAY,
-                AlarmContract.AlarmEntry.COLUMN_SATURDAY,
-                AlarmContract.AlarmEntry.COLUMN_SUNDAY,
-        };
+        String[] projection = AlarmUtils.getProjection();
 
         Cursor cursor = contentResolver.query(AlarmContract.AlarmEntry.CONTENT_URI, projection, null, null, null);
         cursor.moveToFirst();

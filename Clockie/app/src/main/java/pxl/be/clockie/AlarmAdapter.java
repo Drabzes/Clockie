@@ -2,9 +2,12 @@ package pxl.be.clockie;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +16,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+
+import pxl.be.clockie.data.AlarmContract;
+import pxl.be.clockie.utils.AlarmUtils;
+import pxl.be.clockie.utils.CalendarUtils;
 
 public class AlarmAdapter extends ArrayAdapter<Alarm> {
     private final Context context;
@@ -59,55 +62,32 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
         rainTimeTextView.setText(alarm.getRainTime());
 
         int accentColor = ContextCompat.getColor(context, R.color.colorPrimary);
-        List<DayOfTheWeek> daysToSet = new ArrayList<>();
         if (alarm.getDays().get(DayOfTheWeek.MONDAY)) {
             mondayTextView.setTextColor(accentColor);
-            daysToSet.add(DayOfTheWeek.MONDAY);
         }
         if (alarm.getDays().get(DayOfTheWeek.TUESDAY)) {
             tuesdayTextView.setTextColor(accentColor);
-            daysToSet.add(DayOfTheWeek.TUESDAY);
         }
         if (alarm.getDays().get(DayOfTheWeek.WEDNESDAY)) {
             wednesdayTextView.setTextColor(accentColor);
-            daysToSet.add(DayOfTheWeek.WEDNESDAY);
         }
         if (alarm.getDays().get(DayOfTheWeek.THURSDAY)) {
             thursdayTextView.setTextColor(accentColor);
-            daysToSet.add(DayOfTheWeek.THURSDAY);
         }
         if (alarm.getDays().get(DayOfTheWeek.FRIDAY)) {
             fridayTextView.setTextColor(accentColor);
-            daysToSet.add(DayOfTheWeek.FRIDAY);
         }
         if (alarm.getDays().get(DayOfTheWeek.SATURDAY)) {
             saturdayTextView.setTextColor(accentColor);
-            daysToSet.add(DayOfTheWeek.SATURDAY);
         }
         if (alarm.getDays().get(DayOfTheWeek.SUNDAY)) {
             sundayTextView.setTextColor(accentColor);
-            daysToSet.add(DayOfTheWeek.SUNDAY);
         }
 
         if (alarm.isActive()) {
-            if (daysToSet.size() == 0) {
-                Calendar calendar = Calendar.getInstance();
-                int today = calendar.get(Calendar.DAY_OF_WEEK);
-
-                if (alarm.getTime().getTimeInMillis() < System.currentTimeMillis()) {
-                    alarm.getTime().set(Calendar.DAY_OF_WEEK, today + 1);
-                } else {
-                    alarm.getTime().set(Calendar.DAY_OF_WEEK, today);
-                }
-                setAlarm(alarm.getTime(), alarm.getId());
-            }
-            //            else {
-//                for (DayOfTheWeek day : alarm.getDaysToSet()) {
-//                    setRepeatingAlarm(alarm.getTime().getTimeInMillis(), alarm.getId(), day);
-//                }
-//            }
+            alarm = setAlarmDay(alarm);
+            setAlarm(alarm.getTime(), alarm.getId(), alarm.getDaysToSet().size()>0);
         }
-
 
         alarmSwitch.setOnClickListener(new View.OnClickListener() {
 
@@ -116,58 +96,66 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
                 Alarm alarm = alarms.get(position);
                 alarm.setActive(alarmSwitch.isChecked());
 
+                int isActive = alarm.isActive() ? 1 : 0;
+
+                ContentResolver contentResolver = context.getContentResolver();
+                ContentValues values = new ContentValues();
+                values.put(AlarmContract.AlarmEntry.COLUMN_ACTIVE, isActive);
+                contentResolver.update(AlarmContract.AlarmEntry.CONTENT_URI, values, "_id='" + alarm.getId() + "'", null);
+
                 if (alarm.isActive()) {
-                    setAlarm(alarm.getTime(), alarm.getId());
+                    alarm = setAlarmDay(alarm);
+                    setAlarm(alarm.getTime(), alarm.getId(), alarm.getDaysToSet().size()>0);
                 } else {
-                    cancelAlarm(alarm.getId());
+                    cancelAlarm(alarm.getId(), alarm.getDaysToSet().size()>0);
                 }
             }
         });
         return rowView;
     }
 
-    private void cancelAlarm(long id) {
+    private Alarm setAlarmDay(Alarm alarm) {
+        List<DayOfTheWeek> days = alarm.getDaysToSet();
+        if (days.size() == 0) {
+            if (alarm.getTime().getTimeInMillis() < CalendarUtils.getCurrentTimeInMillis()) {
+                alarm.getTime().add(Calendar.DAY_OF_WEEK, 1);
+            }
+        } else {
+            int day = AlarmUtils.findNextWeekDayToSet(days, alarm.getTime());
+            alarm.getTime().set(Calendar.DAY_OF_WEEK, day);
+            if (day < CalendarUtils.getCurrentDayOfWeek()) {
+                alarm.getTime().add(Calendar.DAY_OF_YEAR, 7);
+            }
+        }
+        return alarm;
+    }
+
+    private void cancelAlarm(long id, boolean isRepeat) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         int requestCode = (int) id;
-        PendingIntent pendingIntent = createPendingIntent(requestCode);
+        PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat);
         alarmManager.cancel(pendingIntent);
         Toast.makeText(context, "alarm gecanceld", Toast.LENGTH_SHORT).show();
+
     }
 
-    private void setAlarm(Calendar calendar, long id) {
+    private void setAlarm(Calendar calendar, long id, boolean isRepeat) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         int requestCode = (int) id;
-        PendingIntent pendingIntent = createPendingIntent(requestCode);
+        PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat);
 
-        long timeInMillis = calendar.getTimeInMillis();
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
-        Date date = new Date(timeInMillis);
-        DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
-        String dateFormatted = formatter.format(date);
-        Toast.makeText(context, "alarm is gezet: " + dateFormatted + ", voor dag: " + calendar.get(Calendar.DAY_OF_WEEK), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "alarm gezet: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + "; "
+                + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.MONTH), Toast.LENGTH_SHORT).show();
     }
 
-    private void setRepeatingAlarm(long timeInMillis, long id, DayOfTheWeek day) {
-//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//        int requestCode = (int) id;
-//        PendingIntent pendingIntent = createPendingIntent(requestCode);
-//
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, yourIntent);
-//
-//
-//        Date date = new Date(timeInMillis);
-//        DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
-//        String dateFormatted = formatter.format(date);
-//        Toast.makeText(context, "alarm is gezet: " + dateFormatted, Toast.LENGTH_SHORT).show();
-
-    }
-
-    private PendingIntent createPendingIntent(long id) {
+    private PendingIntent createPendingIntent(long id, boolean isRepeat) {
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra("alarmIsOn", true);
+        intent.putExtra("alarmId", id);
+        intent.putExtra("isRepeat", isRepeat);
         int requestCode = (int) id;
-        return PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

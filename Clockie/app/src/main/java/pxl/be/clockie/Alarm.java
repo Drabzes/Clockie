@@ -1,7 +1,11 @@
 package pxl.be.clockie;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -86,6 +90,23 @@ public class Alarm {
 
     public void setDays(HashMap<DayOfTheWeek, Boolean> days) {
         this.days = days;
+    }
+
+    public List<DayOfTheWeek> getDaysToSet(){
+        List<DayOfTheWeek> daysToSet = new ArrayList<>();
+        for (Map.Entry<DayOfTheWeek,Boolean> pair : days.entrySet()){
+            if(pair.getValue()) {
+                daysToSet.add(pair.getKey());
+            }
+        }
+        Collections.sort(daysToSet, new Comparator<DayOfTheWeek>() {
+            @Override
+            public int compare(DayOfTheWeek d1, DayOfTheWeek d2) {
+                return d1.getValue() - d2.getValue();
+            }
+        });
+
+        return daysToSet;
     }
 
 }
