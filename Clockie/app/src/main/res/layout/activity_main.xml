@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="pxl.be.clockie.MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/mainLinearLayout">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -19,6 +20,13 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stop alarm"
+        android:id="@+id/stopAlarm"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
 
     <fragment android:name="pxl.be.clockie.ListFragment"
         android:layout_width="match_parent"

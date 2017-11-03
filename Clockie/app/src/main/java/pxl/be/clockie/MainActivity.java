@@ -15,7 +15,7 @@ import butterknife.ButterKnife;
 import pxl.be.clockie.data.AlarmDBHelper;
 
 public class MainActivity extends AppCompatActivity implements DetailListener{
-
+    private static Button stopAlarmButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,15 +25,20 @@ public class MainActivity extends AppCompatActivity implements DetailListener{
 
         ButterKnife.bind(this);
 
-        Button stopAlarmButton = (Button) findViewById(R.id.stopAlarm);
+        stopAlarmButton = (Button) findViewById(R.id.stopAlarm);
         stopAlarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
                 intent.putExtra("alarmIsOn", false);
                 sendBroadcast(intent);
+                setVisibilityStopButton(View.GONE);
             }
         });
+    }
+
+    public static void setVisibilityStopButton(int isVisible){
+        stopAlarmButton.setVisibility(isVisible);
     }
 
     @Override

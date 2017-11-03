@@ -1,19 +1,15 @@
 package pxl.be.clockie;
 
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -55,10 +51,6 @@ public class ListFragment extends Fragment {
         ContentResolver contentResolver = getActivity().getContentResolver();
         String[] projection = AlarmUtils.getProjection();
         Cursor cursor = contentResolver.query(AlarmContract.AlarmEntry.CONTENT_URI, projection, null, null, null);
-
-//        if (cursor.getCount() == 0) {
-//            cursor = contentResolver.query(AlarmContract.AlarmEntry.CONTENT_URI, projection, null, null, null);
-//        }
 
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {

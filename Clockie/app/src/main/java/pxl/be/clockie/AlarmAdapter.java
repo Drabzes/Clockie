@@ -86,7 +86,7 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
 
         if (alarm.isActive()) {
             alarm = setAlarmDay(alarm);
-            setAlarm(alarm.getTime(), alarm.getId(), alarm.getDaysToSet().size()>0);
+            setAlarm(alarm.getTime(), alarm.getId(), alarm.getDaysToSet().size()>0, alarm.getLabel());
         }
 
         alarmSwitch.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +105,7 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
 
                 if (alarm.isActive()) {
                     alarm = setAlarmDay(alarm);
-                    setAlarm(alarm.getTime(), alarm.getId(), alarm.getDaysToSet().size()>0);
+                    setAlarm(alarm.getTime(), alarm.getId(), alarm.getDaysToSet().size()>0, alarm.getLabel());
                 } else {
                     cancelAlarm(alarm.getId(), alarm.getDaysToSet().size()>0);
                 }
@@ -133,16 +133,16 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
     private void cancelAlarm(long id, boolean isRepeat) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         int requestCode = (int) id;
-        PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat);
+        PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat, "");
         alarmManager.cancel(pendingIntent);
         Toast.makeText(context, "alarm gecanceld", Toast.LENGTH_SHORT).show();
 
     }
 
-    private void setAlarm(Calendar calendar, long id, boolean isRepeat) {
+    private void setAlarm(Calendar calendar, long id, boolean isRepeat, String alarmLabel) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         int requestCode = (int) id;
-        PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat);
+        PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat, alarmLabel);
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
@@ -150,11 +150,12 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
                 + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.MONTH), Toast.LENGTH_SHORT).show();
     }
 
-    private PendingIntent createPendingIntent(long id, boolean isRepeat) {
+    private PendingIntent createPendingIntent(long id, boolean isRepeat, String alarmLabel) {
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra("alarmIsOn", true);
         intent.putExtra("alarmId", id);
         intent.putExtra("isRepeat", isRepeat);
+        intent.putExtra("label", alarmLabel);
         int requestCode = (int) id;
         return PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
