@@ -1,6 +1,11 @@
 package pxl.be.clockie;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,36 +16,51 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Created by Titaanje-Laptop on 07/11/2017.
- */
-public class WeatherChecker extends AsyncTask<Alarm, Void, Alarm> {
+import pxl.be.clockie.data.AlarmContract;
+
+public class WeatherChecker extends AsyncTask<List<Alarm>, Void, List<Alarm>> {
+
+
     @Override
-    protected Alarm doInBackground(Alarm... alarms) {
+    protected List<Alarm> doInBackground(List<Alarm>... alarms) {
+        List<Alarm> resultAlarms = new ArrayList<>();
         try {
-            String example = "http://api.openweathermap.org/data/2.5/weather?q=Diepenbeek&APPID=232fe333ebaa17ccbd1e6c1fdfa3f790";
-            URL UrlExample = new URL(example);
+            for (Alarm alarm : alarms[0]) {
+                String city = alarm.getCity();
+//                http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=232fe333ebaa17ccbd1e6c1fdfa3f790
+                String example = "http://api.openweathermap.org/data/2.5/weather?q=Diepenbeek&APPID=232fe333ebaa17ccbd1e6c1fdfa3f790";
+                URL UrlExample = new URL(example);
 
-            String JSONString = APIGetRequest(UrlExample);
+                String JSONString = APIGetRequest(UrlExample);
 
-            Weather weather = convertJsonStringToWeather(JSONString);
+                Weather weather = convertJsonStringToWeather(JSONString);
+                alarm.setWeather(weather.getMain());
+                alarm.setLabel("test");
 
-            if (weather.main.equals("Clear")) {
-                alarms[0].setLabel("JoepiGiel");
+                Log.e("in WeatherChecker", alarm.getWeather());
+                resultAlarms.add(alarm);
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return alarms[0];
+            return resultAlarms;
         }
     }
 
     @Override
-    protected void onPostExecute(Alarm result) {
-        //Hier functie aanroepen op alarm in het geheugen te steken
+    protected void onPostExecute(List<Alarm> resultAlarms) {
+        for (Alarm alarm : resultAlarms) {
+            Toast.makeText(App.getAppContext(), alarm.getWeather(), Toast.LENGTH_SHORT).show();
+            ContentResolver contentResolver = App.getAppContext().getContentResolver();
+            ContentValues values = new ContentValues();
+            values.put(AlarmContract.AlarmEntry.COLUMN_WEATHER, alarm.getWeather());
+            values.put(AlarmContract.AlarmEntry.COLUMN_LABEL, alarm.getLabel());
+            contentResolver.update(AlarmContract.AlarmEntry.CONTENT_URI, values, "_id='" + alarm.getId() + "'", null);
+        }
     }
 
     @Override

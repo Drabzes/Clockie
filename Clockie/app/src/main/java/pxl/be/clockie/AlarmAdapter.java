@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -65,9 +66,6 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
         TextView sundayTextView = (TextView) rowView.findViewById(R.id.sundayLabel);
 
         Alarm alarm = alarms.get(position);
-
-        Toast.makeText(context, "weatherChecker", Toast.LENGTH_SHORT).show();
-        new WeatherChecker().execute(alarm);
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         timeTextView.setText(sdf.format(alarm.getTime().getTime()));
@@ -157,7 +155,8 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
         int requestCode = (int) id;
         PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat, alarmLabel);
 
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+//        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(),pendingIntent),pendingIntent);
 
         Toast.makeText(context, "alarm gezet: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + "; "
                 + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.MONTH), Toast.LENGTH_SHORT).show();

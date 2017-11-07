@@ -1,9 +1,12 @@
 package pxl.be.clockie;
 
+import android.app.AlarmManager;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +17,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import pxl.be.clockie.data.AlarmContract;
 import pxl.be.clockie.utils.AlarmUtils;
 
 public class ListFragment extends Fragment {
+    private Timer timer;
+    private List<Alarm> alarms;
+
     public ListFragment() {
+        timer = new Timer();
     }
 
     @Override
@@ -27,7 +36,8 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_fragment, container, false);
 
-        List<Alarm> alarms = getAlarmsFromDatabase();
+        alarms = getAlarmsFromDatabase();
+
 
         AlarmAdapter alarmAdapter = new AlarmAdapter(getActivity(), alarms);
 
@@ -42,6 +52,9 @@ public class ListFragment extends Fragment {
                 detailListener.setFields(position);
             }
         });
+
+        List<Alarm> activeAlarms = getActiveAlarms();
+        checkWeather(activeAlarms);
 
         return view;
     }
@@ -87,6 +100,28 @@ public class ListFragment extends Fragment {
             cursor.close();
         }
         return alarms;
+    }
+
+    public void checkWeather(List<Alarm> alarms){
+        final List<Alarm> alarmsToCheck = alarms;
+        timer.scheduleAtFixedRate(new TimerTask(){
+
+            @Override
+            public void run() {
+                new WeatherChecker().execute(alarmsToCheck);
+            }
+        }, 0, 1*60*1000);
+    }
+
+    public List<Alarm> getActiveAlarms(){
+        List<Alarm> activeAlarms = new ArrayList<>();
+
+        for(Alarm alarm:alarms){
+            if(alarm.isActive()){
+                activeAlarms.add(alarm);
+            }
+        }
+        return activeAlarms;
     }
 }
 

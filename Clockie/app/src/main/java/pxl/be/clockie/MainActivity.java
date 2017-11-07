@@ -11,11 +11,15 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import butterknife.ButterKnife;
 import pxl.be.clockie.data.AlarmDBHelper;
 
 public class MainActivity extends AppCompatActivity implements DetailListener{
     private static Button stopAlarmButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements DetailListener{
                 setVisibilityStopButton(View.GONE);
             }
         });
+
     }
 
     public static void setVisibilityStopButton(int isVisible){
@@ -80,4 +85,8 @@ public class MainActivity extends AppCompatActivity implements DetailListener{
             startActivity(intent);
         }
     }
+
+
+
+
 }
