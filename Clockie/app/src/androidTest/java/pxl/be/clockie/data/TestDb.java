@@ -29,8 +29,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import pxl.be.clockie.Alarm;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -88,7 +86,7 @@ public class TestDb{
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_LABEL);
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_TIME);
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_RAINTIME);
-        columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_SONG);
+        columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_CITY);
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_MONDAY);
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_TUESDAY);
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_WEDNESDAY);
@@ -118,9 +116,8 @@ public class TestDb{
         testValues.put(AlarmContract.AlarmEntry.COLUMN_LABEL, "Test alarm");
         testValues.put(AlarmContract.AlarmEntry.COLUMN_TIME, "11:10");
         testValues.put(AlarmContract.AlarmEntry.COLUMN_RAINTIME, "11:20");
-        testValues.put(AlarmContract.AlarmEntry.COLUMN_SONG, "song");
+        testValues.put(AlarmContract.AlarmEntry.COLUMN_CITY, "song");
         testValues.put(AlarmContract.AlarmEntry.COLUMN_ACTIVE, 0);
-        testValues.put(AlarmContract.AlarmEntry.COLUMN_SNOOZE, 0);
         testValues.put(AlarmContract.AlarmEntry.COLUMN_MONDAY, 1);
         testValues.put(AlarmContract.AlarmEntry.COLUMN_TUESDAY, 1);
         testValues.put(AlarmContract.AlarmEntry.COLUMN_WEDNESDAY, 1);

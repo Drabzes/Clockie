@@ -34,7 +34,7 @@ public class DetailFragment extends Fragment {
     private TextView hiddenId;
     private TimePicker timePicker;
     private EditText nameField;
-    private EditText songField;
+    private EditText cityField;
     private Switch snoozeSwitch;
     private Button saveButton, cancelButton;
     private FloatingActionButton deleteButton;
@@ -51,8 +51,7 @@ public class DetailFragment extends Fragment {
         timePicker = (TimePicker) fragmentView.findViewById(R.id.time);
         timePicker.setIs24HourView(true);
         nameField = (EditText) fragmentView.findViewById(R.id.label);
-        songField = (EditText) fragmentView.findViewById(R.id.song);
-        snoozeSwitch = (Switch) fragmentView.findViewById(R.id.switchSnooze);
+        cityField = (EditText) fragmentView.findViewById(R.id.city);
         mondayButton = (ToggleButton) fragmentView.findViewById(R.id.monday);
         tuesdayButton = (ToggleButton) fragmentView.findViewById(R.id.tuesday);
         wednesdayButton = (ToggleButton) fragmentView.findViewById(R.id.wednesday);
@@ -103,8 +102,7 @@ public class DetailFragment extends Fragment {
             values.put(AlarmContract.AlarmEntry.COLUMN_TIME, timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute());
         }
         values.put(AlarmContract.AlarmEntry.COLUMN_RAINTIME, "06:20");
-        values.put(AlarmContract.AlarmEntry.COLUMN_SONG, songField.getText().toString());
-        values.put(AlarmContract.AlarmEntry.COLUMN_SNOOZE, snoozeSwitch.isChecked() ? 1 : 0);
+        values.put(AlarmContract.AlarmEntry.COLUMN_CITY, cityField.getText().toString());
         values.put(AlarmContract.AlarmEntry.COLUMN_ACTIVE, 1);
         values.put(AlarmContract.AlarmEntry.COLUMN_MONDAY, mondayButton.isChecked() ? 1 : 0);
         values.put(AlarmContract.AlarmEntry.COLUMN_TUESDAY, tuesdayButton.isChecked() ? 1 : 0);
@@ -146,8 +144,8 @@ public class DetailFragment extends Fragment {
             String label = cursor.getString(1);
             String time = cursor.getString(2);
             String rainTime = cursor.getString(3);
-            String song = cursor.getString(4);
-            boolean snooze = cursor.getInt(5) == 1;
+            String city = cursor.getString(4);
+            String weather = cursor.getString(5);
             boolean active = cursor.getInt(6) == 1;
             boolean monday = cursor.getInt(7) == 1;
             boolean tuesday = cursor.getInt(8) == 1;
@@ -173,7 +171,7 @@ public class DetailFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            Alarm alarm = new Alarm(id, calendar, label, active, rainTime, song, snooze, days);
+            Alarm alarm = new Alarm(id, calendar, label, active, rainTime, city, days);
             alarms.add(alarm);
 
             cursor.moveToNext();
@@ -184,8 +182,7 @@ public class DetailFragment extends Fragment {
         timePicker.setHour(alarm.getTime().get(Calendar.HOUR_OF_DAY));
         timePicker.setMinute(alarm.getTime().get(Calendar.MINUTE));
         nameField.setText(alarm.getLabel());
-        songField.setText(alarm.getSong());
-        snoozeSwitch.setChecked(alarm.isSnooze());
+        cityField.setText(alarm.getCity());
         mondayButton.setChecked(alarm.getDays().get(DayOfTheWeek.MONDAY));
         tuesdayButton.setChecked(alarm.getDays().get(DayOfTheWeek.TUESDAY));
         wednesdayButton.setChecked(alarm.getDays().get(DayOfTheWeek.WEDNESDAY));

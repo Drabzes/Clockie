@@ -17,19 +17,19 @@ public class Alarm {
     private String label;
     private boolean active;
     private String rainTime;
-    private String song;
-    private boolean snooze;
+    private String city;
     private HashMap<DayOfTheWeek, Boolean> days;
+    private String weather;
 
-    public Alarm(long id, Calendar time, String label, boolean active, String rainTime, String song, boolean snooze, HashMap<DayOfTheWeek, Boolean> days) {
+    public Alarm(long id, Calendar time, String label, boolean active, String rainTime, String city, HashMap<DayOfTheWeek, Boolean> days) {
         this.id = id;
         this.time = time;
         this.label = label;
         this.active = active;
         this.rainTime = rainTime;
-        this.song = song;
-        this.snooze = snooze;
+        this.city = city;
         this.days = days;
+        this.weather = null;
     }
 
     public long getId() {
@@ -68,20 +68,12 @@ public class Alarm {
         this.rainTime = rainTime;
     }
 
-    public String getSong() {
-        return song;
+    public String getCity() {
+        return city;
     }
 
-    public void setSong(String song) {
-        this.song = song;
-    }
-
-    public boolean isSnooze() {
-        return snooze;
-    }
-
-    public void setSnooze(boolean snooze) {
-        this.snooze = snooze;
+    public void setCity(String song) {
+        this.city = city;
     }
 
     public HashMap<DayOfTheWeek, Boolean> getDays() {
@@ -90,6 +82,14 @@ public class Alarm {
 
     public void setDays(HashMap<DayOfTheWeek, Boolean> days) {
         this.days = days;
+    }
+
+    public String getWeather() {
+        return weather;
+    }
+
+    public void setWeather(String weather) {
+        this.weather = weather;
     }
 
     public List<DayOfTheWeek> getDaysToSet(){

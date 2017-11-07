@@ -129,39 +129,19 @@
         android:layout_marginBottom="20dp">
 
         <TextView
-            android:id="@+id/songlabel"
+            android:id="@+id/citylabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Select song:" />
+            android:text="Select city:" />
 
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:id="@+id/song"/>
+            android:id="@+id/city"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="20dp">
-
-        <TextView
-            android:id="@+id/snoozeLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Snooze" />
-
-        <Switch
-            android:id="@+id/switchSnooze"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3" />
-
-    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

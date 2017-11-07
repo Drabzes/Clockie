@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AlarmDBHelper extends SQLiteOpenHelper {
     private Context context;
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     static final String DATABASE_NAME = "alarm.db";
 
     public AlarmDBHelper(Context context) {
@@ -24,15 +24,15 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
                 AlarmContract.AlarmEntry.COLUMN_TIME + " TEXT NOT NULL, " +
                 AlarmContract.AlarmEntry.COLUMN_ACTIVE + " INTEGER NOT NULL, " +
                 AlarmContract.AlarmEntry.COLUMN_RAINTIME + " TEXT, " +
-                AlarmContract.AlarmEntry.COLUMN_SNOOZE + " INTEGER NOT NULL, " +
-                AlarmContract.AlarmEntry.COLUMN_SONG + " TEXT, " +
+                AlarmContract.AlarmEntry.COLUMN_CITY + " TEXT, " +
                 AlarmContract.AlarmEntry.COLUMN_MONDAY + " INTEGER NOT NULL, " +
                 AlarmContract.AlarmEntry.COLUMN_TUESDAY + " INTEGER NOT NULL, " +
                 AlarmContract.AlarmEntry.COLUMN_WEDNESDAY + " INTEGER NOT NULL, " +
                 AlarmContract.AlarmEntry.COLUMN_THURSDAY + " INTEGER NOT NULL, " +
                 AlarmContract.AlarmEntry.COLUMN_FRIDAY + " INTEGER NOT NULL, " +
                 AlarmContract.AlarmEntry.COLUMN_SATURDAY + " INTEGER NOT NULL, " +
-                AlarmContract.AlarmEntry.COLUMN_SUNDAY + " INTEGER NOT NULL); ";
+                AlarmContract.AlarmEntry.COLUMN_SUNDAY + " INTEGER NOT NULL, " +
+                AlarmContract.AlarmEntry.COLUMN_WEATHER + " TEXT);";
         db.execSQL(SQL_CREATE_ALARM_TABLE);
     }
 

@@ -58,8 +58,8 @@ public class ListFragment extends Fragment {
                 String label = cursor.getString(1);
                 String time = cursor.getString(2);
                 String rainTime = cursor.getString(3);
-                String song = cursor.getString(4);
-                boolean snooze = cursor.getInt(5) == 1;
+                String city = cursor.getString(4);
+                String weather = cursor.getString(5);
                 boolean active = cursor.getInt(6) == 1;
                 boolean monday = cursor.getInt(7) == 1;
                 boolean tuesday = cursor.getInt(8) == 1;
@@ -79,7 +79,7 @@ public class ListFragment extends Fragment {
 
                 Calendar calendar = AlarmUtils.getTimeCalendar(time);
 
-                Alarm alarm = new Alarm(id, calendar, label, active, rainTime, song, snooze, days);
+                Alarm alarm = new Alarm(id, calendar, label, active, rainTime, city, days);
                 alarms.add(alarm);
 
                 cursor.moveToNext();

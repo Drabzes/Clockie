@@ -28,8 +28,7 @@ public class AlarmContract {
         public static final String COLUMN_TIME = "time";
         public static final String COLUMN_ACTIVE = "active";
         public static final String COLUMN_RAINTIME = "rainTime";
-        public static final String COLUMN_SONG = "song";
-        public static final String COLUMN_SNOOZE = "snooze";
+        public static final String COLUMN_CITY = "city";
         public static final String COLUMN_MONDAY = "monday";
         public static final String COLUMN_TUESDAY = "tuesday";
         public static final String COLUMN_WEDNESDAY = "wednesday";
@@ -37,5 +36,6 @@ public class AlarmContract {
         public static final String COLUMN_FRIDAY = "friday";
         public static final String COLUMN_SATURDAY = "saturday";
         public static final String COLUMN_SUNDAY = "sunday";
+        public static final String COLUMN_WEATHER = "weather";
     }
 }
