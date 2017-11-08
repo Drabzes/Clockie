@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pxl.be.clockie.data.AlarmContract;
+import pxl.be.clockie.utils.AlarmUtils;
 
 public class WeatherChecker extends AsyncTask<List<Alarm>, Void, List<Alarm>> {
 
@@ -36,11 +37,14 @@ public class WeatherChecker extends AsyncTask<List<Alarm>, Void, List<Alarm>> {
 
                 String JSONString = APIGetRequest(UrlExample);
 
-                Weather weather = convertJsonStringToWeather(JSONString);
-                alarm.setWeather(weather.getMain());
-                alarm.setLabel("test");
+                if (JSONString.equals("")) {
+                    alarm.setWeather("");
+                } else {
+                    Weather weather = convertJsonStringToWeather(JSONString);
+                    alarm.setWeather(weather.getMain());
+                }
 
-                Log.e("in WeatherChecker", alarm.getWeather());
+                Log.e("weather = ", " " + alarm.getWeather() );
                 resultAlarms.add(alarm);
             }
 
@@ -58,8 +62,9 @@ public class WeatherChecker extends AsyncTask<List<Alarm>, Void, List<Alarm>> {
             ContentResolver contentResolver = App.getAppContext().getContentResolver();
             ContentValues values = new ContentValues();
             values.put(AlarmContract.AlarmEntry.COLUMN_WEATHER, alarm.getWeather());
-            values.put(AlarmContract.AlarmEntry.COLUMN_LABEL, alarm.getLabel());
             contentResolver.update(AlarmContract.AlarmEntry.CONTENT_URI, values, "_id='" + alarm.getId() + "'", null);
+
+            AlarmUtils.setAlarm(alarm);
         }
     }
 

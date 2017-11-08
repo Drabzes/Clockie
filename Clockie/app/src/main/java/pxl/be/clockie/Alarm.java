@@ -29,7 +29,7 @@ public class Alarm {
         this.rainTime = rainTime;
         this.city = city;
         this.days = days;
-        this.weather = null;
+        this.weather = "";
     }
 
     public long getId() {

@@ -27,7 +27,7 @@ public class AlarmContract {
         public static final String COLUMN_LABEL = "label";
         public static final String COLUMN_TIME = "time";
         public static final String COLUMN_ACTIVE = "active";
-        public static final String COLUMN_RAINTIME = "rainTime";
+        public static final String COLUMN_CHECKRAIN = "rainTime";
         public static final String COLUMN_CITY = "city";
         public static final String COLUMN_MONDAY = "monday";
         public static final String COLUMN_TUESDAY = "tuesday";

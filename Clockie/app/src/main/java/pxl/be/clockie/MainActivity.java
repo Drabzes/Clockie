@@ -2,6 +2,7 @@ package pxl.be.clockie;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,7 +18,7 @@ import java.util.TimerTask;
 import butterknife.ButterKnife;
 import pxl.be.clockie.data.AlarmDBHelper;
 
-public class MainActivity extends AppCompatActivity implements DetailListener{
+public class MainActivity extends AppCompatActivity implements DetailListener {
     private static Button stopAlarmButton;
 
     @Override
@@ -40,9 +41,18 @@ public class MainActivity extends AppCompatActivity implements DetailListener{
 //            }
 //        });
 
+        FloatingActionButton addAlarmButton = (FloatingActionButton) findViewById(R.id.addIcon);
+        addAlarmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
-    public static void setVisibilityStopButton(int isVisible){
+    public static void setVisibilityStopButton(int isVisible) {
         stopAlarmButton.setVisibility(isVisible);
     }
 
@@ -68,25 +78,12 @@ public class MainActivity extends AppCompatActivity implements DetailListener{
         return super.onOptionsItemSelected(item);
     }
 
-    public void addAlarmButtonClicked(View view) {
-        Intent intent = new Intent(this, DetailActivity.class);
-        startActivity(intent);
-    }
-
-
     @Override
     public void setFields(int position) {
-        if (findViewById(R.id.detailFragment) != null) {
-            DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.detailFragment);
-            detailFragment.setAllFields(position);
-        } else {
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("position", position);
-            startActivity(intent);
-        }
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("position", position);
+        startActivity(intent);
     }
-
-
 
 
 }

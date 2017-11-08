@@ -1,12 +1,9 @@
 package pxl.be.clockie;
 
-import android.app.AlarmManager;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +35,13 @@ public class ListFragment extends Fragment {
 
         alarms = getAlarmsFromDatabase();
 
+        List<Alarm> activeAlarms = getActiveAlarms();
+        checkWeather(activeAlarms);
+
+        //STAAT NU IN WEATHERCHECKER -> IS DAT OK? -> wordt dus om het half uur ofzo uitgevoerd
+//        for (Alarm activeAlarm : activeAlarms) {
+//            AlarmUtils.setAlarm(activeAlarm);
+//        }
 
         AlarmAdapter alarmAdapter = new AlarmAdapter(getActivity(), alarms);
 
@@ -55,9 +59,6 @@ public class ListFragment extends Fragment {
             }
         });
 
-        List<Alarm> activeAlarms = getActiveAlarms();
-        checkWeather(activeAlarms);
-
         return view;
     }
 
@@ -72,7 +73,7 @@ public class ListFragment extends Fragment {
                 long id = cursor.getLong(0);
                 String label = cursor.getString(1);
                 String time = cursor.getString(2);
-                String rainTime = cursor.getString(3);
+                boolean checkRain = cursor.getInt(3) == 1;
                 String city = cursor.getString(4);
                 String weather = cursor.getString(5);
                 boolean active = cursor.getInt(6) == 1;
@@ -94,7 +95,7 @@ public class ListFragment extends Fragment {
 
                 Calendar calendar = AlarmUtils.getTimeCalendar(time);
 
-                Alarm alarm = new Alarm(id, calendar, label, active, rainTime, city, days);
+                Alarm alarm = new Alarm(id, calendar, label, active, "0:0", city, days);
                 alarms.add(alarm);
 
                 cursor.moveToNext();

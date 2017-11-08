@@ -1,10 +1,20 @@
 package pxl.be.clockie.utils;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import pxl.be.clockie.Alarm;
+import pxl.be.clockie.AlarmReceiver;
+import pxl.be.clockie.App;
 import pxl.be.clockie.DayOfTheWeek;
 import pxl.be.clockie.data.AlarmContract;
 
@@ -15,7 +25,7 @@ public abstract class AlarmUtils {
         calendar.set(Calendar.DAY_OF_WEEK, today);
         int dayToSet = -1;
         int i = 0;
-        while(dayToSet == -1 && i < days.size()) {
+        while (dayToSet == -1 && i < days.size()) {
             int dayValue = days.get(i).getValue();
             if (dayValue == today) {
                 if (calendar.getTimeInMillis() > CalendarUtils.getCurrentTimeInMillis()) {
@@ -32,12 +42,12 @@ public abstract class AlarmUtils {
         return dayToSet;
     }
 
-    public static String[] getProjection(){
+    public static String[] getProjection() {
         String[] projection = new String[]{
                 AlarmContract.AlarmEntry._ID,
                 AlarmContract.AlarmEntry.COLUMN_LABEL,
                 AlarmContract.AlarmEntry.COLUMN_TIME,
-                AlarmContract.AlarmEntry.COLUMN_RAINTIME,
+                AlarmContract.AlarmEntry.COLUMN_CHECKRAIN,
                 AlarmContract.AlarmEntry.COLUMN_CITY,
                 AlarmContract.AlarmEntry.COLUMN_WEATHER,
                 AlarmContract.AlarmEntry.COLUMN_ACTIVE,
@@ -52,7 +62,7 @@ public abstract class AlarmUtils {
         return projection;
     }
 
-    public static Calendar getTimeCalendar(String timeString){
+    public static Calendar getTimeCalendar(String timeString) {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         Calendar calendar = Calendar.getInstance();
         try {
@@ -71,4 +81,58 @@ public abstract class AlarmUtils {
         return calendarRightDate;
     }
 
+    public static void setAlarm(Alarm alarm) {
+        if (alarm.getWeather() != null && alarm.getWeather().toLowerCase().contains("rain")) {
+            alarm.getTime().add(Calendar.MINUTE, -15);
+        }
+        alarm = setAlarmDay(alarm);
+        scheduleAlarm(alarm.getTime(), alarm.getId(), alarm.getDaysToSet().size() > 0, alarm.getLabel());
+    }
+
+    private static Alarm setAlarmDay(Alarm alarm) {
+        List<DayOfTheWeek> days = alarm.getDaysToSet();
+        if (days.size() == 0) {
+            if (alarm.getTime().getTimeInMillis() < CalendarUtils.getCurrentTimeInMillis()) {
+                alarm.getTime().add(Calendar.DAY_OF_WEEK, 1);
+            }
+        } else {
+            int day = AlarmUtils.findNextWeekDayToSet(days, alarm.getTime());
+            alarm.getTime().set(Calendar.DAY_OF_WEEK, day);
+            if (day < CalendarUtils.getCurrentDayOfWeek()) {
+                alarm.getTime().add(Calendar.DAY_OF_YEAR, 7);
+            }
+        }
+        return alarm;
+    }
+
+    private static void scheduleAlarm(Calendar calendar, long id, boolean isRepeat, String alarmLabel) {
+        AlarmManager alarmManager = (AlarmManager) App.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        int requestCode = (int) id;
+        PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat, alarmLabel);
+
+        alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), pendingIntent), pendingIntent);
+
+        Toast.makeText(App.getAppContext(), "alarm gezet: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + "; "
+                + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.MONTH), Toast.LENGTH_SHORT).show();
+        Log.e("alarm gezet: ", calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + "; "
+                + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.MONTH));
+    }
+
+    public static void cancelAlarm(long id, boolean isRepeat) {
+        AlarmManager alarmManager = (AlarmManager) App.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        int requestCode = (int) id;
+        PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat, "");
+        alarmManager.cancel(pendingIntent);
+        Toast.makeText(App.getAppContext(), "alarm gecanceld", Toast.LENGTH_SHORT).show();
+    }
+
+    private static PendingIntent createPendingIntent(long id, boolean isRepeat, String alarmLabel) {
+        Intent intent = new Intent(App.getAppContext(), AlarmReceiver.class);
+        intent.putExtra("alarmIsOn", true);
+        intent.putExtra("alarmId", id);
+        intent.putExtra("isRepeat", isRepeat);
+        intent.putExtra("label", alarmLabel);
+        int requestCode = (int) id;
+        return PendingIntent.getBroadcast(App.getAppContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
 }

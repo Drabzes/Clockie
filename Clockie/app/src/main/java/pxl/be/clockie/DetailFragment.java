@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ToggleButton;
@@ -35,7 +34,6 @@ public class DetailFragment extends Fragment {
     private TimePicker timePicker;
     private EditText nameField;
     private EditText cityField;
-    private Switch snoozeSwitch;
     private Button saveButton, cancelButton;
     private FloatingActionButton deleteButton;
     private ToggleButton mondayButton, tuesdayButton, wednesdayButton, thursdayButton, fridayButton, saturdayButton, sundayButton;
@@ -101,7 +99,7 @@ public class DetailFragment extends Fragment {
         } else{
             values.put(AlarmContract.AlarmEntry.COLUMN_TIME, timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute());
         }
-        values.put(AlarmContract.AlarmEntry.COLUMN_RAINTIME, "06:20");
+        values.put(AlarmContract.AlarmEntry.COLUMN_CHECKRAIN, 1);
         values.put(AlarmContract.AlarmEntry.COLUMN_CITY, cityField.getText().toString());
         values.put(AlarmContract.AlarmEntry.COLUMN_ACTIVE, 1);
         values.put(AlarmContract.AlarmEntry.COLUMN_MONDAY, mondayButton.isChecked() ? 1 : 0);
@@ -143,7 +141,7 @@ public class DetailFragment extends Fragment {
             long id = cursor.getLong(0);
             String label = cursor.getString(1);
             String time = cursor.getString(2);
-            String rainTime = cursor.getString(3);
+            boolean checkRain = cursor.getInt(3) == 1;
             String city = cursor.getString(4);
             String weather = cursor.getString(5);
             boolean active = cursor.getInt(6) == 1;
@@ -171,7 +169,7 @@ public class DetailFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            Alarm alarm = new Alarm(id, calendar, label, active, rainTime, city, days);
+            Alarm alarm = new Alarm(id, calendar, label, active, "0:0" , city, days);
             alarms.add(alarm);
 
             cursor.moveToNext();
