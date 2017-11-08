@@ -80,9 +80,14 @@ public class MainActivity extends AppCompatActivity implements DetailListener {
 
     @Override
     public void setFields(int position) {
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra("position", position);
-        startActivity(intent);
+        if (findViewById(R.id.detailFragment) != null) {
+            DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.detailFragment);
+            detailFragment.setAllFields(position);
+        }else {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra("position", position);
+            startActivity(intent);
+        }
     }
 
 
