@@ -8,161 +8,170 @@
     android:paddingRight="40dp"
     android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/hiddenId"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:text="-1" />
+            android:orientation="vertical" >
 
-        <TimePicker
-            android:id="@+id/time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:timePickerMode="spinner"
-            android:numbersTextColor="@color/colorPrimary"
-            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="label"
-            android:layout_gravity="center"
-            android:id="@+id/label"/>
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/hiddenId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-1"
+                    android:visibility="invisible" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Herhaal alarm:"/>
+                <TimePicker
+                    android:id="@+id/time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:numbersTextColor="@color/colorPrimary"
+                    android:timePickerMode="spinner" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:hint="label" />
+            </LinearLayout>
 
-        <ToggleButton
-            android:id="@+id/monday"
-            style="@style/AppTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOff="M"
-            android:textOn="M"
-            android:textSize="15sp" />
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Herhaal alarm:" />
 
-        <ToggleButton
-            android:id="@+id/tuesday"
-            style="@style/AppTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="15sp"
-            android:textOff="D"
-            android:textOn="D"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
 
-        <ToggleButton
-            android:id="@+id/wednesday"
-            style="@style/AppTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="15sp"
-            android:textOn="W"
-            android:textOff="W"/>
+                <ToggleButton
+                    android:id="@+id/monday"
+                    style="@style/AppTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textOff="M"
+                    android:textOn="M"
+                    android:textSize="15sp" />
 
-        <ToggleButton
-            android:id="@+id/thursday"
-            style="@style/AppTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOn="D"
-            android:textOff="D"
-            android:textSize="15sp" />
+                <ToggleButton
+                    android:id="@+id/tuesday"
+                    style="@style/AppTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textOff="D"
+                    android:textOn="D"
+                    android:textSize="15sp" />
 
-        <ToggleButton
-            android:id="@+id/friday"
-            style="@style/AppTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOn="V"
-            android:textOff="V"
-            android:textSize="15sp" />
+                <ToggleButton
+                    android:id="@+id/wednesday"
+                    style="@style/AppTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textOff="W"
+                    android:textOn="W"
+                    android:textSize="15sp" />
 
-        <ToggleButton
-            android:id="@+id/saturday"
-            style="@style/AppTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOn="Z"
-            android:textOff="Z"
-            android:textSize="15sp" />
+                <ToggleButton
+                    android:id="@+id/thursday"
+                    style="@style/AppTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textOff="D"
+                    android:textOn="D"
+                    android:textSize="15sp" />
 
-        <ToggleButton
-            android:id="@+id/sunday"
-            style="@style/AppTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOn="Z"
-            android:textOff="Z"
-            android:textSize="15sp" />
+                <ToggleButton
+                    android:id="@+id/friday"
+                    style="@style/AppTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textOff="V"
+                    android:textOn="V"
+                    android:textSize="15sp" />
 
-    </LinearLayout>
+                <ToggleButton
+                    android:id="@+id/saturday"
+                    style="@style/AppTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textOff="Z"
+                    android:textOn="Z"
+                    android:textSize="15sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="20dp">
+                <ToggleButton
+                    android:id="@+id/sunday"
+                    style="@style/AppTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textOff="Z"
+                    android:textOn="Z"
+                    android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/citylabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Select city:" />
+            </LinearLayout>
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:id="@+id/city"/>
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/citylabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Select city:" />
 
-        <Button
-            android:id="@+id/buttonCancel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:layout_weight="1"/>
+                <EditText
+                    android:id="@+id/city"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/buttonSave"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:layout_weight="1"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    </LinearLayout>
+                <Button
+                    android:id="@+id/buttonCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cancel" />
 
+                <Button
+                    android:id="@+id/buttonSave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Save" />
 
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>
