@@ -85,7 +85,7 @@ public class TestDb{
         columnHashSet.add(AlarmContract.AlarmEntry._ID);
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_LABEL);
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_TIME);
-        columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_RAINTIME);
+        columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_CHECKRAIN);
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_CITY);
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_MONDAY);
         columnHashSet.add(AlarmContract.AlarmEntry.COLUMN_TUESDAY);
@@ -115,7 +115,7 @@ public class TestDb{
         ContentValues testValues = new ContentValues();
         testValues.put(AlarmContract.AlarmEntry.COLUMN_LABEL, "Test alarm");
         testValues.put(AlarmContract.AlarmEntry.COLUMN_TIME, "11:10");
-        testValues.put(AlarmContract.AlarmEntry.COLUMN_RAINTIME, "11:20");
+        testValues.put(AlarmContract.AlarmEntry.COLUMN_CHECKRAIN, "11:20");
         testValues.put(AlarmContract.AlarmEntry.COLUMN_CITY, "song");
         testValues.put(AlarmContract.AlarmEntry.COLUMN_ACTIVE, 0);
         testValues.put(AlarmContract.AlarmEntry.COLUMN_MONDAY, 1);

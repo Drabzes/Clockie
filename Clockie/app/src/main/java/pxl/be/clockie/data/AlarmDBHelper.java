@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AlarmDBHelper extends SQLiteOpenHelper {
     private Context context;
 
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 10;
     static final String DATABASE_NAME = "alarm.db";
 
     public AlarmDBHelper(Context context) {
@@ -23,7 +23,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
                 AlarmContract.AlarmEntry.COLUMN_LABEL + " TEXT NOT NULL, " +
                 AlarmContract.AlarmEntry.COLUMN_TIME + " TEXT NOT NULL, " +
                 AlarmContract.AlarmEntry.COLUMN_ACTIVE + " INTEGER NOT NULL, " +
-                AlarmContract.AlarmEntry.COLUMN_RAINTIME + " TEXT, " +
+                AlarmContract.AlarmEntry.COLUMN_CHECKRAIN + " TEXT, " +
                 AlarmContract.AlarmEntry.COLUMN_CITY + " TEXT, " +
                 AlarmContract.AlarmEntry.COLUMN_MONDAY + " INTEGER NOT NULL, " +
                 AlarmContract.AlarmEntry.COLUMN_TUESDAY + " INTEGER NOT NULL, " +
