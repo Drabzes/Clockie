@@ -55,7 +55,7 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
 
         TextView timeTextView = (TextView) rowView.findViewById(R.id.time);
         TextView labelTextView = (TextView) rowView.findViewById(R.id.label);
-        final Switch alarmSwitch = (Switch) rowView.findViewById(R.id.alarmSwitch);
+        Switch alarmSwitch = (Switch) rowView.findViewById(R.id.alarmSwitch);
         TextView rainTimeTextView = (TextView) rowView.findViewById(R.id.clockRain);
         TextView mondayTextView = (TextView) rowView.findViewById(R.id.mondayLabel);
         TextView tuesdayTextView = (TextView) rowView.findViewById(R.id.tuesdayLabel);
@@ -106,7 +106,7 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
             @Override
             public void onClick(View v) {
                 Alarm alarm = alarms.get(position);
-                alarm.setActive(alarmSwitch.isChecked());
+                alarm.setActive(true);
 
                 int isActive = alarm.isActive() ? 1 : 0;
 

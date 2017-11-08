@@ -45,7 +45,9 @@ public class ListFragment extends Fragment {
         listView.setAdapter(alarmAdapter);
 
         listView.setItemsCanFocus(true);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            // Wanneer er een rij aangeklikt wordt, sturen we de positie door naar de Listener
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DetailListener detailListener = (DetailListener) getActivity();
