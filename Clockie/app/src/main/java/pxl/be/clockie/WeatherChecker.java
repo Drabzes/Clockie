@@ -31,9 +31,8 @@ public class WeatherChecker extends AsyncTask<List<Alarm>, Void, List<Alarm>> {
         try {
             for (Alarm alarm : alarms[0]) {
                 String city = alarm.getCity();
-//                http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=232fe333ebaa17ccbd1e6c1fdfa3f790
-                String example = "http://api.openweathermap.org/data/2.5/weather?q=Diepenbeek&APPID=232fe333ebaa17ccbd1e6c1fdfa3f790";
-                URL UrlExample = new URL(example);
+                String request = " http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=232fe333ebaa17ccbd1e6c1fdfa3f790";
+                URL UrlExample = new URL(request);
 
                 String JSONString = APIGetRequest(UrlExample);
 
@@ -58,7 +57,6 @@ public class WeatherChecker extends AsyncTask<List<Alarm>, Void, List<Alarm>> {
     @Override
     protected void onPostExecute(List<Alarm> resultAlarms) {
         for (Alarm alarm : resultAlarms) {
-            Toast.makeText(App.getAppContext(), alarm.getWeather(), Toast.LENGTH_SHORT).show();
             ContentResolver contentResolver = App.getAppContext().getContentResolver();
             ContentValues values = new ContentValues();
             values.put(AlarmContract.AlarmEntry.COLUMN_WEATHER, alarm.getWeather());

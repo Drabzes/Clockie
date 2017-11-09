@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">Clockie</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="pref_ringtone_label">Geluid</string>
+    <string name="pref_ringtone_key">sound</string>
+    <string name="pref_ringtone_default">DEFAULT_ALARM_ALERT_URI</string>
+
+    <string name="pref_rainMinutes_label">Aantal minuten bij regen: </string>
+    <string name="pref_rainMinutes_key">rainMinutes</string>
+    <string name="pref_rainMinutes_default">1</string>
 </resources>

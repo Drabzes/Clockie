@@ -5,14 +5,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="pxl.be.clockie.App">
-
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -23,24 +22,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".DetailActivity"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".AddAlarmActivity"
             android:parentActivityName=".MainActivity" />
 
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity"/>
+
         <receiver
             android:name=".AlarmReceiver"
-            android:enabled="true"/>
+            android:enabled="true" />
 
-        <service android:name=".RingtoneService"
-            android:enabled="true"/>
+        <service
+            android:name=".RingtoneService"
+            android:enabled="true" />
 
-        <provider android:authorities="pxl.be.clockie"
-            android:name=".data.AlarmProvider"/>
+        <provider
+            android:name=".data.AlarmProvider"
+            android:authorities="pxl.be.clockie" />
+
     </application>
 
 </manifest>

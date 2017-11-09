@@ -10,7 +10,12 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,8 +67,24 @@ public class DetailActivity extends AppCompatActivity implements DetailListener 
             }
         });
 
-    }
+        Switch checkRainSwitch = (Switch) findViewById(R.id.checkRainSwitch);
+        final TextView cityTextView = (TextView) findViewById(R.id.citylabel);
+        final EditText city = (EditText) findViewById(R.id.city);
+        checkRainSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                                       @Override
+                                                       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                                           if(isChecked){
+                                                               city.setVisibility(View.VISIBLE);
+                                                               cityTextView.setVisibility(View.VISIBLE);
+                                                           } else{
+                                                               city.setVisibility(View.GONE);
+                                                               cityTextView.setVisibility(View.GONE);
+                                                           }
+                                                       }
+                                                   }
+        );
 
+    }
 
     @Override
     public void setFields(int position) {

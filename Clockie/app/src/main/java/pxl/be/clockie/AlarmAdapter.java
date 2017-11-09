@@ -6,6 +6,8 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,8 @@ import pxl.be.clockie.utils.CalendarUtils;
 public class AlarmAdapter extends ArrayAdapter<Alarm> {
     private final Context context;
     private final List<Alarm> alarms;
+    private TextView mondayTextView, tuesdayTextView, wednesdayTextView, thursdayTextView;
+    private TextView fridayTextView, saturdayTextView,  sundayTextView;
 
     AlarmAdapter(Context context, List<Alarm> alarms) {
         super(context, -1, alarms);
@@ -42,14 +46,15 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
         TextView timeTextView = (TextView) rowView.findViewById(R.id.time);
         TextView labelTextView = (TextView) rowView.findViewById(R.id.label);
         final Switch alarmSwitch = (Switch) rowView.findViewById(R.id.alarmSwitch);
+        ImageView rainIcon = (ImageView) rowView.findViewById(R.id.rainIcon);
         TextView rainTimeTextView = (TextView) rowView.findViewById(R.id.clockRain);
-        TextView mondayTextView = (TextView) rowView.findViewById(R.id.mondayLabel);
-        TextView tuesdayTextView = (TextView) rowView.findViewById(R.id.tuesdayLabel);
-        TextView wednesdayTextView = (TextView) rowView.findViewById(R.id.wednesdayLabel);
-        TextView thursdayTextView = (TextView) rowView.findViewById(R.id.thursdayLabel);
-        TextView fridayTextView = (TextView) rowView.findViewById(R.id.fridayLabel);
-        TextView saturdayTextView = (TextView) rowView.findViewById(R.id.saturdayLabel);
-        TextView sundayTextView = (TextView) rowView.findViewById(R.id.sundayLabel);
+        mondayTextView = (TextView) rowView.findViewById(R.id.mondayLabel);
+        tuesdayTextView = (TextView) rowView.findViewById(R.id.tuesdayLabel);
+        wednesdayTextView = (TextView) rowView.findViewById(R.id.wednesdayLabel);
+        thursdayTextView = (TextView) rowView.findViewById(R.id.thursdayLabel);
+        fridayTextView = (TextView) rowView.findViewById(R.id.fridayLabel);
+        saturdayTextView = (TextView) rowView.findViewById(R.id.saturdayLabel);
+        sundayTextView = (TextView) rowView.findViewById(R.id.sundayLabel);
 
         Alarm alarm = alarms.get(position);
 
@@ -57,38 +62,23 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
         timeTextView.setText(sdf.format(alarm.getTime().getTime()));
         labelTextView.setText(alarm.getLabel());
         alarmSwitch.setChecked(alarm.isActive());
-        rainTimeTextView.setText(alarm.getRainTime());
 
-//        if (alarm.checkRain()) {
-//            ImageView rainIcon = (ImageView) rowView.findViewById(R.id.rainIcon);
-//            rainIcon.setVisibility(View.VISIBLE);
-//            Calendar rainTime = alarm.getTime();
-//            rainTime.add(Calendar.MINUTE, -15);
-//            rainTimeTextView.setText(sdf.format(rainTime.getTime()));
-//        }
+        if (alarm.isCheckRain()) {
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
+            String key = App.getAppContext().getResources().getString(R.string.pref_rainMinutes_key);
+            int rainMinutes = sharedPrefs.getInt(key, 0);
 
-        int accentColor = ContextCompat.getColor(context, R.color.colorPrimary);
-        if (alarm.getDays().get(DayOfTheWeek.MONDAY)) {
-            mondayTextView.setTextColor(accentColor);
+            rainIcon.setVisibility(View.VISIBLE);
+            Calendar rainTime = (Calendar) alarm.getTime().clone();
+            rainTime.add(Calendar.MINUTE, rainMinutes);
+            rainTimeTextView.setText(sdf.format(rainTime.getTime()));
+        } else{
+            rainIcon.setVisibility(View.GONE);
+            rainTimeTextView.setVisibility(View.GONE);
+
         }
-        if (alarm.getDays().get(DayOfTheWeek.TUESDAY)) {
-            tuesdayTextView.setTextColor(accentColor);
-        }
-        if (alarm.getDays().get(DayOfTheWeek.WEDNESDAY)) {
-            wednesdayTextView.setTextColor(accentColor);
-        }
-        if (alarm.getDays().get(DayOfTheWeek.THURSDAY)) {
-            thursdayTextView.setTextColor(accentColor);
-        }
-        if (alarm.getDays().get(DayOfTheWeek.FRIDAY)) {
-            fridayTextView.setTextColor(accentColor);
-        }
-        if (alarm.getDays().get(DayOfTheWeek.SATURDAY)) {
-            saturdayTextView.setTextColor(accentColor);
-        }
-        if (alarm.getDays().get(DayOfTheWeek.SUNDAY)) {
-            sundayTextView.setTextColor(accentColor);
-        }
+
+        setDayButtons(alarm);
 
         alarmSwitch.setOnClickListener(new View.OnClickListener() {
 
@@ -112,5 +102,30 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
             }
         });
         return rowView;
+    }
+
+    private void setDayButtons(Alarm alarm) {
+        int accentColor = ContextCompat.getColor(context, R.color.colorPrimary);
+        if (alarm.getDays().get(DayOfTheWeek.MONDAY)) {
+            mondayTextView.setTextColor(accentColor);
+        }
+        if (alarm.getDays().get(DayOfTheWeek.TUESDAY)) {
+            tuesdayTextView.setTextColor(accentColor);
+        }
+        if (alarm.getDays().get(DayOfTheWeek.WEDNESDAY)) {
+            wednesdayTextView.setTextColor(accentColor);
+        }
+        if (alarm.getDays().get(DayOfTheWeek.THURSDAY)) {
+            thursdayTextView.setTextColor(accentColor);
+        }
+        if (alarm.getDays().get(DayOfTheWeek.FRIDAY)) {
+            fridayTextView.setTextColor(accentColor);
+        }
+        if (alarm.getDays().get(DayOfTheWeek.SATURDAY)) {
+            saturdayTextView.setTextColor(accentColor);
+        }
+        if (alarm.getDays().get(DayOfTheWeek.SUNDAY)) {
+            sundayTextView.setTextColor(accentColor);
+        }
     }
 }

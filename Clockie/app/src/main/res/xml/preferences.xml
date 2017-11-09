@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <RingtonePreference
+        android:defaultValue="@string/pref_ringtone_default"
+        android:key="@string/pref_ringtone_key"
+        android:ringtoneType="ringtone|alarm"
+        android:title="@string/pref_ringtone_label" />
+    <pxl.be.clockie.NumberPickerPreference
+        android:defaultValue="@string/pref_rainMinutes_default"
+        android:key="@string/pref_rainMinutes_key"
+        android:title="@string/pref_rainMinutes_label"/>
+
+
+</PreferenceScreen>

@@ -41,7 +41,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         this.context = context;
         this.intent = intent;
-        startRingtoneService(context, intent);
         if (intent.getExtras().getBoolean("alarmIsOn")) {
             MainActivity.setVisibilityStopButton(View.VISIBLE);
             showNotification(context);
@@ -58,6 +57,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             manager.cancel(NOTIFY_ID);
             MainActivity.setVisibilityStopButton(View.GONE);
         }
+        startRingtoneService(context, intent);
     }
 
     private void setAlarmInactive() {

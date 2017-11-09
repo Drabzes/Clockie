@@ -4,6 +4,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import pxl.be.clockie.Alarm;
 import pxl.be.clockie.AlarmReceiver;
 import pxl.be.clockie.App;
 import pxl.be.clockie.DayOfTheWeek;
+import pxl.be.clockie.R;
 import pxl.be.clockie.data.AlarmContract;
 
 public abstract class AlarmUtils {
@@ -83,7 +86,10 @@ public abstract class AlarmUtils {
 
     public static void setAlarm(Alarm alarm) {
         if (alarm.getWeather() != null && alarm.getWeather().toLowerCase().contains("rain")) {
-            alarm.getTime().add(Calendar.MINUTE, -15);
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
+            String key = App.getAppContext().getResources().getString(R.string.pref_rainMinutes_key);
+            int rainMinutes = sharedPrefs.getInt(key, 0);
+            alarm.getTime().add(Calendar.MINUTE, rainMinutes);
         }
         alarm = setAlarmDay(alarm);
         scheduleAlarm(alarm.getTime(), alarm.getId(), alarm.getDaysToSet().size() > 0, alarm.getLabel());

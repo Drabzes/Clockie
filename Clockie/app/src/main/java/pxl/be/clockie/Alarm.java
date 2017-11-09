@@ -16,17 +16,17 @@ public class Alarm {
     private Calendar time;
     private String label;
     private boolean active;
-    private String rainTime;
+    private boolean checkRain;
     private String city;
     private HashMap<DayOfTheWeek, Boolean> days;
     private String weather;
 
-    public Alarm(long id, Calendar time, String label, boolean active, String rainTime, String city, HashMap<DayOfTheWeek, Boolean> days) {
+    public Alarm(long id, Calendar time, String label, boolean active, boolean checkRain, String city, HashMap<DayOfTheWeek, Boolean> days) {
         this.id = id;
         this.time = time;
         this.label = label;
         this.active = active;
-        this.rainTime = rainTime;
+        this.checkRain = checkRain;
         this.city = city;
         this.days = days;
         this.weather = "";
@@ -60,12 +60,12 @@ public class Alarm {
         this.active = active;
     }
 
-    public String getRainTime() {
-        return rainTime;
+    public boolean isCheckRain() {
+        return checkRain;
     }
 
-    public void setRainTime(String rainTime) {
-        this.rainTime = rainTime;
+    public void setCheckRain(boolean checkRain) {
+        this.checkRain = checkRain;
     }
 
     public String getCity() {

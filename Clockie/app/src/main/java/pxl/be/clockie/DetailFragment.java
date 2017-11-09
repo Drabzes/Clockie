@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ToggleButton;
@@ -31,6 +32,8 @@ import pxl.be.clockie.utils.AlarmUtils;
 
 public class DetailFragment extends Fragment {
     private TextView hiddenId;
+    private Switch checkRainSwitch;
+    private TextView cityTextView;
     private TimePicker timePicker;
     private EditText nameField;
     private EditText cityField;
@@ -49,6 +52,8 @@ public class DetailFragment extends Fragment {
         timePicker = (TimePicker) fragmentView.findViewById(R.id.time);
         timePicker.setIs24HourView(true);
         nameField = (EditText) fragmentView.findViewById(R.id.label);
+        checkRainSwitch = (Switch) fragmentView.findViewById(R.id.checkRainSwitch);
+        cityTextView = (TextView) fragmentView.findViewById(R.id.citylabel);
         cityField = (EditText) fragmentView.findViewById(R.id.city);
         mondayButton = (ToggleButton) fragmentView.findViewById(R.id.monday);
         tuesdayButton = (ToggleButton) fragmentView.findViewById(R.id.tuesday);
@@ -99,7 +104,7 @@ public class DetailFragment extends Fragment {
         } else{
             values.put(AlarmContract.AlarmEntry.COLUMN_TIME, timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute());
         }
-        values.put(AlarmContract.AlarmEntry.COLUMN_CHECKRAIN, 1);
+        values.put(AlarmContract.AlarmEntry.COLUMN_CHECKRAIN, checkRainSwitch.isChecked() ? 1 : 0);
         values.put(AlarmContract.AlarmEntry.COLUMN_CITY, cityField.getText().toString());
         values.put(AlarmContract.AlarmEntry.COLUMN_ACTIVE, 1);
         values.put(AlarmContract.AlarmEntry.COLUMN_MONDAY, mondayButton.isChecked() ? 1 : 0);
@@ -143,7 +148,6 @@ public class DetailFragment extends Fragment {
             String time = cursor.getString(2);
             boolean checkRain = cursor.getInt(3) == 1;
             String city = cursor.getString(4);
-            String weather = cursor.getString(5);
             boolean active = cursor.getInt(6) == 1;
             boolean monday = cursor.getInt(7) == 1;
             boolean tuesday = cursor.getInt(8) == 1;
@@ -169,7 +173,7 @@ public class DetailFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            Alarm alarm = new Alarm(id, calendar, label, active, "0:0" , city, days);
+            Alarm alarm = new Alarm(id, calendar, label, active, checkRain, city, days);
             alarms.add(alarm);
 
             cursor.moveToNext();
@@ -188,6 +192,14 @@ public class DetailFragment extends Fragment {
         fridayButton.setChecked(alarm.getDays().get(DayOfTheWeek.FRIDAY));
         saturdayButton.setChecked(alarm.getDays().get(DayOfTheWeek.SATURDAY));
         sundayButton.setChecked(alarm.getDays().get(DayOfTheWeek.SUNDAY));
+        checkRainSwitch.setChecked(alarm.isCheckRain());
+        if(alarm.isCheckRain()){
+            cityTextView.setVisibility(View.VISIBLE);
+            cityField.setVisibility(View.VISIBLE);
+        } else{
+            cityTextView.setVisibility(View.GONE);
+            cityField.setVisibility(View.GONE);
+        }
     }
 }
 

@@ -35,13 +35,8 @@ public class ListFragment extends Fragment {
 
         alarms = getAlarmsFromDatabase();
 
-        List<Alarm> activeAlarms = getActiveAlarms();
-        checkWeather(activeAlarms);
-
-        //STAAT NU IN WEATHERCHECKER -> IS DAT OK? -> wordt dus om het half uur ofzo uitgevoerd
-//        for (Alarm activeAlarm : activeAlarms) {
-//            AlarmUtils.setAlarm(activeAlarm);
-//        }
+        List<Alarm> alarmsToCheckWeather = getAlarmsToCheck();
+        checkWeather(alarmsToCheckWeather);
 
         AlarmAdapter alarmAdapter = new AlarmAdapter(getActivity(), alarms);
 
@@ -73,7 +68,6 @@ public class ListFragment extends Fragment {
                 String time = cursor.getString(2);
                 boolean checkRain = cursor.getInt(3) == 1;
                 String city = cursor.getString(4);
-                String weather = cursor.getString(5);
                 boolean active = cursor.getInt(6) == 1;
                 boolean monday = cursor.getInt(7) == 1;
                 boolean tuesday = cursor.getInt(8) == 1;
@@ -93,7 +87,7 @@ public class ListFragment extends Fragment {
 
                 Calendar calendar = AlarmUtils.getTimeCalendar(time);
 
-                Alarm alarm = new Alarm(id, calendar, label, active, "0:0", city, days);
+                Alarm alarm = new Alarm(id, calendar, label, active, checkRain, city, days);
                 alarms.add(alarm);
 
                 cursor.moveToNext();
@@ -111,18 +105,18 @@ public class ListFragment extends Fragment {
             public void run() {
                 new WeatherChecker().execute(alarmsToCheck);
             }
-        }, 0, 1*60*1000);
+        }, 0, 30*60*1000);
     }
 
-    public List<Alarm> getActiveAlarms(){
-        List<Alarm> activeAlarms = new ArrayList<>();
+    public List<Alarm> getAlarmsToCheck(){
+        List<Alarm> alarmsToCheck = new ArrayList<>();
 
         for(Alarm alarm:alarms){
-            if(alarm.isActive()){
-                activeAlarms.add(alarm);
+            if(alarm.isActive() && alarm.isCheckRain()){
+                alarmsToCheck.add(alarm);
             }
         }
-        return activeAlarms;
+        return alarmsToCheck;
     }
 }
 
