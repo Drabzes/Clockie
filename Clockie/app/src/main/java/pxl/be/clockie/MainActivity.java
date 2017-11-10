@@ -49,8 +49,6 @@ public class MainActivity extends AppCompatActivity implements DetailListener {
         });
     }
 
-
-
     public static void setVisibilityStopButton(int isVisible) {
         if(stopAlarmButton != null){
             stopAlarmButton.setVisibility(isVisible);
