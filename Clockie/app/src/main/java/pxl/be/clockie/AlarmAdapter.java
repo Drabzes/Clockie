@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import pxl.be.clockie.data.AlarmContract;
@@ -96,6 +98,7 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
 
                 if (alarm.isActive()) {
                     AlarmUtils.setAlarm(alarm);
+
                 } else {
                     AlarmUtils.cancelAlarm(alarm.getId(), alarm.getDaysToSet().size() > 0);
                 }

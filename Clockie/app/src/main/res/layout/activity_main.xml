@@ -27,7 +27,6 @@
         android:id="@+id/stopAlarm"
         android:layout_gravity="center"
         android:visibility="gone"/>
-
     <fragment android:name="pxl.be.clockie.ListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

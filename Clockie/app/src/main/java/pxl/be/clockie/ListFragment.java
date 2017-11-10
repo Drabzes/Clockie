@@ -1,7 +1,5 @@
 package pxl.be.clockie;
 
-import android.content.ContentResolver;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,13 +9,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import pxl.be.clockie.data.AlarmContract;
 import pxl.be.clockie.utils.AlarmUtils;
 
 public class ListFragment extends Fragment {
@@ -33,10 +28,11 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_fragment, container, false);
 
-        alarms = getAlarmsFromDatabase();
+        alarms = AlarmUtils.getAlarmsFromDatabase();
 
         List<Alarm> alarmsToCheckWeather = getAlarmsToCheck();
         checkWeather(alarmsToCheckWeather);
+        setActiveAlarms();
 
         AlarmAdapter alarmAdapter = new AlarmAdapter(getActivity(), alarms);
 
@@ -55,49 +51,8 @@ public class ListFragment extends Fragment {
         return view;
     }
 
-    private List<Alarm> getAlarmsFromDatabase() {
-        List<Alarm> alarms = new ArrayList<>();
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        String[] projection = AlarmUtils.getProjection();
-        Cursor cursor = contentResolver.query(AlarmContract.AlarmEntry.CONTENT_URI, projection, null, null, null);
 
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                long id = cursor.getLong(0);
-                String label = cursor.getString(1);
-                String time = cursor.getString(2);
-                boolean checkRain = cursor.getInt(3) == 1;
-                String city = cursor.getString(4);
-                boolean active = cursor.getInt(6) == 1;
-                boolean monday = cursor.getInt(7) == 1;
-                boolean tuesday = cursor.getInt(8) == 1;
-                boolean wednesday = cursor.getInt(9) == 1;
-                boolean thursday = cursor.getInt(10) == 1;
-                boolean friday = cursor.getInt(11) == 1;
-                boolean saturday = cursor.getInt(12) == 1;
-                boolean sunday = cursor.getInt(13) == 1;
-                HashMap<DayOfTheWeek, Boolean> days = new HashMap<>();
-                days.put(DayOfTheWeek.SUNDAY, sunday);
-                days.put(DayOfTheWeek.MONDAY, monday);
-                days.put(DayOfTheWeek.TUESDAY, tuesday);
-                days.put(DayOfTheWeek.WEDNESDAY, wednesday);
-                days.put(DayOfTheWeek.THURSDAY, thursday);
-                days.put(DayOfTheWeek.FRIDAY, friday);
-                days.put(DayOfTheWeek.SATURDAY, saturday);
-
-                Calendar calendar = AlarmUtils.getTimeCalendar(time);
-
-                Alarm alarm = new Alarm(id, calendar, label, active, checkRain, city, days);
-                alarms.add(alarm);
-
-                cursor.moveToNext();
-            }
-            cursor.close();
-        }
-        return alarms;
-    }
-
-    public void checkWeather(List<Alarm> alarms){
+    private void checkWeather(List<Alarm> alarms){
         final List<Alarm> alarmsToCheck = alarms;
         timer.scheduleAtFixedRate(new TimerTask(){
 
@@ -108,7 +63,7 @@ public class ListFragment extends Fragment {
         }, 0, 30*60*1000);
     }
 
-    public List<Alarm> getAlarmsToCheck(){
+    private List<Alarm> getAlarmsToCheck(){
         List<Alarm> alarmsToCheck = new ArrayList<>();
 
         for(Alarm alarm:alarms){
@@ -117,6 +72,17 @@ public class ListFragment extends Fragment {
             }
         }
         return alarmsToCheck;
+    }
+
+    private List<Alarm> setActiveAlarms(){
+        List<Alarm> activeAlarms = new ArrayList<>();
+
+        for(Alarm alarm:alarms){
+            if(alarm.isActive()){
+                AlarmUtils.setAlarm(alarm);
+            }
+        }
+        return activeAlarms;
     }
 }
 

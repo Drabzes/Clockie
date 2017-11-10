@@ -41,9 +41,11 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         this.context = context;
         this.intent = intent;
+
         if (intent.getExtras().getBoolean("alarmIsOn")) {
             MainActivity.setVisibilityStopButton(View.VISIBLE);
             showNotification(context);
+
             alarmId = intent.getExtras().getLong("alarmId");
             contentResolver = context.getContentResolver();
 

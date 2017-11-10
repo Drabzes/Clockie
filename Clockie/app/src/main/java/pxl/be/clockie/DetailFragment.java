@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.text.ParseException;
@@ -69,19 +70,22 @@ public class DetailFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long id = Long.parseLong(hiddenId.getText().toString());
-                contentResolver = getActivity().getContentResolver();
-                ContentValues values = putValues();
+                if ( (checkRainSwitch.isChecked() && cityField.getText().toString().trim().equals("")) ) {
+                    Toast.makeText(getContext(), "Geef een gemeente op!", Toast.LENGTH_SHORT).show();
+                } else {
+                    long id = Long.parseLong(hiddenId.getText().toString());
+                    contentResolver = getActivity().getContentResolver();
+                    ContentValues values = putValues();
 
-                if (isExistingAlarm(id)) {
-                    contentResolver.update(AlarmContract.AlarmEntry.CONTENT_URI, values, "_id='" + id + "'", null);
+                    if (isExistingAlarm(id)) {
+                        contentResolver.update(AlarmContract.AlarmEntry.CONTENT_URI, values, "_id='" + id + "'", null);
+                    } else {
+                        contentResolver.insert(AlarmContract.AlarmEntry.CONTENT_URI, values);
+                    }
 
-                } else{
-                    contentResolver.insert(AlarmContract.AlarmEntry.CONTENT_URI, values);
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    startActivity(intent);
                 }
-
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                startActivity(intent);
             }
         });
 

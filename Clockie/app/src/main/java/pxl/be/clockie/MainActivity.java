@@ -1,6 +1,10 @@
 package pxl.be.clockie;
 
+import android.app.AlarmManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -43,11 +47,14 @@ public class MainActivity extends AppCompatActivity implements DetailListener {
                 startActivity(intent);
             }
         });
-
     }
 
+
+
     public static void setVisibilityStopButton(int isVisible) {
-        stopAlarmButton.setVisibility(isVisible);
+        if(stopAlarmButton != null){
+            stopAlarmButton.setVisibility(isVisible);
+        }
     }
 
     @Override
@@ -74,6 +81,4 @@ public class MainActivity extends AppCompatActivity implements DetailListener {
         intent.putExtra("position", position);
         startActivity(intent);
     }
-
-
 }

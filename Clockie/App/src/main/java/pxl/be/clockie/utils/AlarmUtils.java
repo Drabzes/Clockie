@@ -2,16 +2,21 @@ package pxl.be.clockie.utils;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import pxl.be.clockie.Alarm;
@@ -22,6 +27,48 @@ import pxl.be.clockie.R;
 import pxl.be.clockie.data.AlarmContract;
 
 public abstract class AlarmUtils {
+
+    public static List<Alarm> getAlarmsFromDatabase() {
+        List<Alarm> alarms = new ArrayList<>();
+        ContentResolver contentResolver = App.getAppContext().getContentResolver();
+        String[] projection = AlarmUtils.getProjection();
+        Cursor cursor = contentResolver.query(AlarmContract.AlarmEntry.CONTENT_URI, projection, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                long id = cursor.getLong(0);
+                String label = cursor.getString(1);
+                String time = cursor.getString(2);
+                boolean checkRain = cursor.getInt(3) == 1;
+                String city = cursor.getString(4);
+                boolean active = cursor.getInt(6) == 1;
+                boolean monday = cursor.getInt(7) == 1;
+                boolean tuesday = cursor.getInt(8) == 1;
+                boolean wednesday = cursor.getInt(9) == 1;
+                boolean thursday = cursor.getInt(10) == 1;
+                boolean friday = cursor.getInt(11) == 1;
+                boolean saturday = cursor.getInt(12) == 1;
+                boolean sunday = cursor.getInt(13) == 1;
+                HashMap<DayOfTheWeek, Boolean> days = new HashMap<>();
+                days.put(DayOfTheWeek.SUNDAY, sunday);
+                days.put(DayOfTheWeek.MONDAY, monday);
+                days.put(DayOfTheWeek.TUESDAY, tuesday);
+                days.put(DayOfTheWeek.WEDNESDAY, wednesday);
+                days.put(DayOfTheWeek.THURSDAY, thursday);
+                days.put(DayOfTheWeek.FRIDAY, friday);
+                days.put(DayOfTheWeek.SATURDAY, saturday);
+
+                Calendar calendar = AlarmUtils.getTimeCalendar(time);
+
+                Alarm alarm = new Alarm(id, calendar, label, active, checkRain, city, days);
+                alarms.add(alarm);
+
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        return alarms;
+    }
 
     public static int findNextWeekDayToSet(List<DayOfTheWeek> days, Calendar calendar) {
         int today = CalendarUtils.getCurrentDayOfWeek();
@@ -120,8 +167,6 @@ public abstract class AlarmUtils {
 
         Toast.makeText(App.getAppContext(), "alarm gezet: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + "; "
                 + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.MONTH), Toast.LENGTH_SHORT).show();
-        Log.e("alarm gezet: ", calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + "; "
-                + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.MONTH));
     }
 
     public static void cancelAlarm(long id, boolean isRepeat) {
