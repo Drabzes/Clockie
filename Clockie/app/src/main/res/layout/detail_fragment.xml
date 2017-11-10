@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:elegantTextHeight="false"
-                android:text="Zet de wekker ... indien het regent:"
+                android:text="Pas de wekker aan bij regent:"
                 android:textStyle="bold"/>
 
             <TextView
@@ -147,7 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/checkRainSwitch"
-                android:text="Controleer op regen in gemeente:"
+                android:text="Regen in gemeente:"
                 android:textColor="@android:color/black"
                 android:visibility="gone"/>
 

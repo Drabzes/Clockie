@@ -2,13 +2,17 @@ package pxl.be.clockie.utils;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import java.text.ParseException;
@@ -22,6 +26,7 @@ import java.util.List;
 import pxl.be.clockie.Alarm;
 import pxl.be.clockie.AlarmReceiver;
 import pxl.be.clockie.App;
+import pxl.be.clockie.AppWidget;
 import pxl.be.clockie.DayOfTheWeek;
 import pxl.be.clockie.R;
 import pxl.be.clockie.data.AlarmContract;
@@ -164,9 +169,7 @@ public abstract class AlarmUtils {
         PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat, alarmLabel);
 
         alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), pendingIntent), pendingIntent);
-
-        Toast.makeText(App.getAppContext(), "alarm gezet: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + "; "
-                + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.MONTH), Toast.LENGTH_SHORT).show();
+        updateWidget(calendar);
     }
 
     public static void cancelAlarm(long id, boolean isRepeat) {
@@ -174,7 +177,6 @@ public abstract class AlarmUtils {
         int requestCode = (int) id;
         PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat, "");
         alarmManager.cancel(pendingIntent);
-        Toast.makeText(App.getAppContext(), "alarm gecanceld", Toast.LENGTH_SHORT).show();
     }
 
     private static PendingIntent createPendingIntent(long id, boolean isRepeat, String alarmLabel) {
@@ -185,5 +187,22 @@ public abstract class AlarmUtils {
         intent.putExtra("label", alarmLabel);
         int requestCode = (int) id;
         return PendingIntent.getBroadcast(App.getAppContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public static void updateWidget(Calendar calendar) {
+        long timeMillis = calendar.getTimeInMillis();
+        Date nextAlarmDate = new Date(timeMillis);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EE d/MM");
+        String time = timeFormat.format(nextAlarmDate);
+        String date = dateFormat.format(nextAlarmDate);
+
+        Context context = App.getAppContext();
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.app_widget);
+        ComponentName thisWidget = new ComponentName(context, AppWidget.class);
+        views.setTextViewText(R.id.appwidget_time, time);
+        views.setTextViewText(R.id.appwidget_day, date);
+        appWidgetManager.updateAppWidget(thisWidget, views);
     }
 }

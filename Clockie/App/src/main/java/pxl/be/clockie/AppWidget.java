@@ -1,9 +1,11 @@
 package pxl.be.clockie;
 
 import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
@@ -22,17 +24,25 @@ public class AppWidget extends AppWidgetProvider {
                                 int appWidgetId) {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        CharSequence widgetText = "Not found";
+        String time = "Geen wekker ingesteld";
+        String date = "";
         if(alarmManager.getNextAlarmClock() != null){
             long nextAlarmTime = alarmManager.getNextAlarmClock().getTriggerTime();
             Date nextAlarmDate = new Date(nextAlarmTime);
-            Log.e("next alarm: ", nextAlarmDate.toString());
-            SimpleDateFormat dt = new SimpleDateFormat("hh:mm");
-            widgetText = dt.format(nextAlarmDate);
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EE d/MM");
+            time = timeFormat.format(nextAlarmDate);
+            date = dateFormat.format(nextAlarmDate);
         }
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.app_widget);
-        views.setTextViewText(R.id.appwidget_alarm, widgetText);
+        views.setTextViewText(R.id.appwidget_time, time);
+        views.setTextViewText(R.id.appwidget_day, date);
+
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        views.setOnClickPendingIntent(R.id.widgetLayout, pendingIntent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);

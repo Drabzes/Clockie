@@ -1,39 +1,49 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
-    android:updatePeriodMillis="10000"
-    android:padding="@dimen/widget_margin">
+    android:padding="10dp"
+    android:orientation="horizontal"
+    android:background="#6c232222"
+    android:id="@+id/widgetLayout">
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:src="@drawable/alarm_clock_icon_color"
+        android:layout_weight="1"
+        android:id="@+id/appwidget_clockIcon"/>
 
     <TextView
-        android:id="@+id/appwidget_text"
-        android:layout_width="wrap_content"
+        android:id="@+id/appwidget_time"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/appwidget_alarm"
-        android:layout_alignBottom="@+id/appwidget_alarm"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@color/colorAccent"
-        android:contentDescription="Next Alarm:"
-        android:text="Next Alarm:"
-        android:textColor="#ffffff"
-        android:textSize="14sp"
-        android:textStyle="bold|italic" />
-
-    <TextView
-        android:id="@+id/appwidget_alarm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:layout_margin="8dp"
-        android:layout_toRightOf="@+id/appwidget_text"
-        android:background="@color/colorAccent"
-        android:contentDescription=""
+        android:contentDescription="time"
+        android:layout_weight="2"
         android:text="@string/appwidget_text"
-        android:textColor="#ffffff"
-        android:textSize="14sp"
-        android:textStyle="bold|italic" />
-
-</RelativeLayout>
+        android:textAlignment="center"
+        android:textSize="25dp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/appwidget_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="right"
+            android:contentDescription="Next alarm"
+            android:text="Volgende wekker"/>
+        <TextView
+            android:id="@+id/appwidget_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/appwidget_time"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="8dp"
+            android:contentDescription="Dag"
+            android:layout_gravity="right"
+            android:layout_marginBottom="10dp"
+            android:text=""/>
+    </LinearLayout>
+</LinearLayout>

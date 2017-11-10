@@ -2,9 +2,9 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialKeyguardLayout="@layout/app_widget"
     android:initialLayout="@layout/app_widget"
-    android:minHeight="40dp"
-    android:minWidth="110dp"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:minHeight="50dp"
+    android:minWidth="240dp"
+    android:previewImage="@drawable/alarm_clock_icon_color"
     android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="86400000"
+    android:updatePeriodMillis="10000"
     android:widgetCategory="home_screen"></appwidget-provider>
