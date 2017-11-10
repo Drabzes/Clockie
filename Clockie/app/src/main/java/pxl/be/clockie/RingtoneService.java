@@ -32,13 +32,13 @@ public class RingtoneService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         boolean alarmIsOn = intent.getExtras().getBoolean("alarmIsOn");
 
-        if(alarmIsOn){
+        if (alarmIsOn) {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-            ringtone = sharedPrefs.getString(getString(R.string.pref_ringtone_key), getString(R.string.pref_ringtone_default));
+            String defaultTone = getApplicationContext().getResources().getString(R.string.pref_ringtone_default);
+            ringtone = sharedPrefs.getString(getString(R.string.pref_ringtone_key),defaultTone);
             mediaPlayer = MediaPlayer.create(this, Uri.parse(ringtone));
             mediaPlayer.start();
-
-        } else{
+        } else {
             mediaPlayer.release();
         }
         return START_NOT_STICKY;
