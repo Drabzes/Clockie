@@ -10,4 +10,6 @@
     <string name="pref_rainMinutes_label">Aantal minuten bij regen: </string>
     <string name="pref_rainMinutes_key">rainMinutes</string>
     <string name="pref_rainMinutes_default">1</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>
