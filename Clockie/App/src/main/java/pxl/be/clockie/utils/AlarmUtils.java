@@ -9,11 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -137,7 +134,7 @@ public abstract class AlarmUtils {
     }
 
     public static void setAlarm(Alarm alarm) {
-        if (alarm.getWeather() != null && alarm.getWeather().toLowerCase().contains("rain")) {
+        if (alarm.getWeather() != null && (alarm.getWeather().toLowerCase().contains("rain") || alarm.getWeather().toLowerCase().contains("drizzle"))) {
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(App.getAppContext());
             String key = App.getAppContext().getResources().getString(R.string.pref_rainMinutes_key);
             int rainMinutes = sharedPrefs.getInt(key, 0);
@@ -169,7 +166,7 @@ public abstract class AlarmUtils {
         PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat, alarmLabel);
 
         alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(), pendingIntent), pendingIntent);
-        updateWidget(calendar);
+        updateWidget();
     }
 
     public static void cancelAlarm(long id, boolean isRepeat) {
@@ -177,6 +174,7 @@ public abstract class AlarmUtils {
         int requestCode = (int) id;
         PendingIntent pendingIntent = createPendingIntent(requestCode, isRepeat, "");
         alarmManager.cancel(pendingIntent);
+        updateWidget();
     }
 
     private static PendingIntent createPendingIntent(long id, boolean isRepeat, String alarmLabel) {
@@ -189,19 +187,27 @@ public abstract class AlarmUtils {
         return PendingIntent.getBroadcast(App.getAppContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    public static void updateWidget(Calendar calendar) {
-        long timeMillis = calendar.getTimeInMillis();
-        Date nextAlarmDate = new Date(timeMillis);
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EE d/MM");
-        String time = timeFormat.format(nextAlarmDate);
-        String date = dateFormat.format(nextAlarmDate);
+    public static void updateWidget() {
+        AlarmManager alarmManager = (AlarmManager) App.getAppContext().getSystemService(Context.ALARM_SERVICE);
+        AlarmManager.AlarmClockInfo nextAlarm = alarmManager.getNextAlarmClock();
+        String timeString;
+        String date;
+        if(nextAlarm != null){
+            Date nextAlarmDate = new Date(nextAlarm.getTriggerTime());
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EE d/MM");
+            timeString = timeFormat.format(nextAlarmDate);
+            date = dateFormat.format(nextAlarmDate);
+        } else{
+            timeString = "Geen wekker";
+            date = "";
+        }
 
         Context context = App.getAppContext();
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.app_widget);
         ComponentName thisWidget = new ComponentName(context, AppWidget.class);
-        views.setTextViewText(R.id.appwidget_time, time);
+        views.setTextViewText(R.id.appwidget_time, timeString);
         views.setTextViewText(R.id.appwidget_day, date);
         appWidgetManager.updateAppWidget(thisWidget, views);
     }

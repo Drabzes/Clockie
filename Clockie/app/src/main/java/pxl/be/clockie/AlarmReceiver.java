@@ -8,21 +8,13 @@ import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import pxl.be.clockie.data.AlarmContract;
@@ -58,6 +50,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             manager.cancel(NOTIFY_ID);
             MainActivity.setVisibilityStopButton(View.GONE);
+            AlarmUtils.updateWidget();
         }
         startRingtoneService(context, intent);
     }
@@ -118,9 +111,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(calendar.getTimeInMillis(),pendingIntent),pendingIntent);
-
-        Toast.makeText(context, "alarm gezet: " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE) + "; "
-                + calendar.get(Calendar.DATE) + " " + calendar.get(Calendar.MONTH), Toast.LENGTH_SHORT).show();
     }
 
     private void startRingtoneService(Context context, Intent intent) {

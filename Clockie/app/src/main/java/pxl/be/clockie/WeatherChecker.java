@@ -31,7 +31,7 @@ public class WeatherChecker extends AsyncTask<List<Alarm>, Void, List<Alarm>> {
         try {
             for (Alarm alarm : alarms[0]) {
                 String city = alarm.getCity();
-                String request = " http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=232fe333ebaa17ccbd1e6c1fdfa3f790";
+                String request = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=232fe333ebaa17ccbd1e6c1fdfa3f790";
                 URL UrlExample = new URL(request);
 
                 String JSONString = APIGetRequest(UrlExample);
@@ -43,7 +43,6 @@ public class WeatherChecker extends AsyncTask<List<Alarm>, Void, List<Alarm>> {
                     alarm.setWeather(weather.getMain());
                 }
 
-                Log.e("weather = ", " " + alarm.getWeather() );
                 resultAlarms.add(alarm);
             }
 
